@@ -1,5 +1,5 @@
 /*
- * @file IMleEventListener.go
+ * @file EventObject.go
  * Created on June 4, 2019. (msm@wizzerworks.com)
  */
 
@@ -37,35 +37,54 @@
 // COPYRIGHT_END
 
 // Declare package.
-package event
+package util
 
-// Import Magic Lantern packages.
-import (
-	mle_util "github.com/mle/runtime/util"
-)
+// Import go packages.
 
 /**
- * <code>IMleEventListener</code> is used to encapsulate a Magic Lantern
- * listener for the <code>MleEvent</code> events.
+ * The Event class is the abstract root class from which all event state objects shall be derived.
  *
- * @author  Mark S. Millard
- * @version 1.0
+ * All Event's are constructed with a reference to the object, the "source", that is logically
+ * deemed to be the object upon which the Event in question initially occurred upon. 
  */
- type IMleEventListener interface {
-	 mle_util.IEventListener
-	
-	/**
-	 * Invoked when the <code>MleEvent</code> is processed.
-	 * 
-	 * @param event The event that has been processed by the <code>MleEventDispatcher</code>.
-	 */
-	EventProcessed(event *MleEvent)
- 
-	/**
-	 * Invoked when the <code>MleEvent</code> is dispatched.
-	 * 
-	 * @param event The event that has been dispatched by the <code>MleEventDispatcher</code>.
-	 */
-	EventDispatched(event *MleEvent)
- }
- 
+type EventObject struct {
+	/** The source of the event. */
+	m_source *IObject
+}
+
+/**
+ * The default constructor.
+ */
+func NewEventObject() *EventObject {
+	p := new(EventObject)
+	p.m_source = nil
+	return p
+}
+
+/**
+ * Constructs a prototypical Event.
+ *
+ * @param source The object that the Event occurred upon.
+ */
+func NewEventObjectWithObject(source *IObject) *EventObject {
+	p := new(EventObject)
+	p.m_source = source
+	return p
+}
+
+/**
+ * Get the source of the Event.
+ *
+ * @return The object that the Event initially occurred upon.
+ */
+func (event *EventObject) GetSource() *IObject {
+	return event.m_source
+}
+
+/**
+ * Implement IObject interface.
+ */
+func ToString() string {
+	// ToDo: implement string.
+	return ""
+}
