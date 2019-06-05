@@ -40,6 +40,9 @@
 package event
 
 // Import Magic Lantern packages.
+import (
+	mle_util "github.com/mle/runtime/util"
+)
 
 /**
  * A property change event.
@@ -55,7 +58,7 @@ type MlePropChangeEvent struct {
 	/** Common event data. */
 	m_event MleEvent
 	/** The source that caused this event to be fired. */
-	m_source interface{}
+	m_source *mle_util.Object
 
 	/** The name of the property. */
 	m_name string
@@ -73,7 +76,7 @@ type MlePropChangeEvent struct {
  * @param oldValue The old value of the property.
  * @param newValue The new value of the property.
  */
-func NewMlePropChangeEvent(source interface{}, propertyName string, oldValue interface{}, newValue interface{}) *MlePropChangeEvent {
+func NewMlePropChangeEvent(source *mle_util.Object, propertyName string, oldValue interface{}, newValue interface{}) *MlePropChangeEvent {
 	p := new(MlePropChangeEvent)
 	p.m_source = source
 	p.m_name = propertyName
