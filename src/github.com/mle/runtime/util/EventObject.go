@@ -49,7 +49,7 @@ package util
  */
 type EventObject struct {
 	/** The source of the event. */
-	m_source *IObject
+	m_source *Object
 }
 
 /**
@@ -66,7 +66,7 @@ func NewEventObject() *EventObject {
  *
  * @param source The object that the Event occurred upon.
  */
-func NewEventObjectWithObject(source *IObject) *EventObject {
+func NewEventObjectWithSource(source *Object) *EventObject {
 	p := new(EventObject)
 	p.m_source = source
 	return p
@@ -77,7 +77,7 @@ func NewEventObjectWithObject(source *IObject) *EventObject {
  *
  * @return The object that the Event initially occurred upon.
  */
-func (event *EventObject) GetSource() *IObject {
+func (event *EventObject) GetSource() *Object {
 	return event.m_source
 }
 

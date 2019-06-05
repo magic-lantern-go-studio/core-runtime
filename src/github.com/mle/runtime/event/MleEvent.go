@@ -42,6 +42,7 @@ package event
 // Import go packages.
 import (
 	"fmt"
+	mle_util "github.com/mle/runtime/util"
 )
 
 /** Constant defining invalid id. */
@@ -54,6 +55,8 @@ const MLE_EVENT_INVALID_ID int = 0xffffffff
  * @version 1.0
  */
 type MleEvent struct {
+	m_event *mle_util.EventObject
+
 	/** The event id. */
 	m_id int
 	/** The event dispatch type. */
@@ -105,8 +108,9 @@ func (event *MleEvent) GetEventId(cid int) int16 {
  *
  * @param source The object on which the Event initially occurred.
  */
-func NewMleEvent(source interface{}) *MleEvent {
+func NewMleEvent(source *mle_util.Object) *MleEvent {
 	p := new(MleEvent)
+	p.m_event = mle_util.NewEventObjectWithSource(source)
 	p.m_id = MLE_EVENT_INVALID_ID
 	p.m_type = MLE_EVENT_DELAYED
 	p.m_calldata = nil
@@ -121,8 +125,9 @@ func NewMleEvent(source interface{}) *MleEvent {
  * @param source The object on which the Event initially occurred.
  * @param id The event id.
  */
-func NewMleEventWithId(source interface{}, id int) *MleEvent {
+func NewMleEventWithId(source *mle_util.Object, id int) *MleEvent {
 	p := new(MleEvent)
+	p.m_event = mle_util.NewEventObjectWithSource(source)
 	p.m_id = id
 	p.m_type = MLE_EVENT_DELAYED
 	p.m_calldata = nil
@@ -141,8 +146,9 @@ func NewMleEventWithId(source interface{}, id int) *MleEvent {
  *   <li>IMleEventCallback.MLE_EVENT_DELAYED</li>
  * </ul>
  */
-func NewMleEventWithIdEvtype(source interface{}, id int, evType int16) *MleEvent {
+func NewMleEventWithIdEvtype(source *mle_util.Object, id int, evType int16) *MleEvent {
 	p := new(MleEvent)
+	p.m_event = mle_util.NewEventObjectWithSource(source)
 	p.m_id = id
 	p.m_type = evType
 	p.m_calldata = nil
@@ -158,8 +164,9 @@ func NewMleEventWithIdEvtype(source interface{}, id int, evType int16) *MleEvent
  * @param id The event id.
  * @param calldata The caller data associated with this event.
  */
-func NewMleEventWithIdCalldata(source interface{}, id int, calldata interface{}) *MleEvent {
+func NewMleEventWithIdCalldata(source *mle_util.Object, id int, calldata interface{}) *MleEvent {
 	p := new(MleEvent)
+	p.m_event = mle_util.NewEventObjectWithSource(source)
 	p.m_id = id
 	p.m_type = MLE_EVENT_DELAYED
 	p.m_calldata = calldata
@@ -179,8 +186,9 @@ func NewMleEventWithIdCalldata(source interface{}, id int, calldata interface{})
  * </ul>
  * @param calldata The caller data associated with this event.
  */
-func NewMleEventWithIdEvTypeCalldata(source interface{}, id int, evType int16, calldata interface{}) *MleEvent {
+func NewMleEventWithIdEvTypeCalldata(source *mle_util.Object, id int, evType int16, calldata interface{}) *MleEvent {
 	p := new(MleEvent)
+	p.m_event = mle_util.NewEventObjectWithSource(source)
 	p.m_id = id
 	p.m_type = evType
 	p.m_calldata = calldata
@@ -240,6 +248,10 @@ func (event *MleEvent) GetCallData() interface{} {
  */
 func (event *MleEvent) SetCallData(calldata interface{}) {
 	event.m_calldata = calldata
+}
+
+func (event *MleEvent) GetSource() *mle_util.Object {
+    return event.m_event.GetSource()
 }
 
 /**
