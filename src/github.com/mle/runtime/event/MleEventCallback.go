@@ -76,7 +76,7 @@ func NewMleEventCallback() *MleEventCallback {
  * @see com.wizzer.mle.runtime.event.IMleEventCallback#dispatch(com.wizzer.mle.runtime.event.MleEvent, java.lang.Object)
  */
 func Dispatch(event *MleEvent, clientdata *mle_util.Object) bool {
-	// ToDo: Log something here. This method is supposed to be abstract (i.e. no implemented)
+	// ToDo: Log something here. This method is supposed to be abstract (i.e. not implemented)
 	return false
 }
         
