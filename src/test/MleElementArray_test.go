@@ -48,11 +48,13 @@ import (
 
 type MyElement struct {
 	name string
+	id int
 }
 
-func NewMyElement(name string) *MyElement {
+func NewMyElement(name string, id int) *MyElement {
 	p := new(MyElement)
 	p.name = name
+	p.id = id
 	return p
 }
 
@@ -61,6 +63,11 @@ func (e *MyElement) ToString() string {
 }
 
 func (e *MyElement)  IsGreaterThan(element mle_util.IMleElement) bool {
+	e1 := e.id
+	e2 := element.(*MyElement).id
+	if e1 > e2 {
+		return true
+	}
 	return false
 }
 
@@ -85,7 +92,7 @@ func TestAddElement(t *testing.T) {
 		t.Errorf("TestAddElement: NewMleElementArray() returned nil")
 	}
 
-	e := NewMyElement("")
+	e := NewMyElement("", 0)
 	if e == nil {
 		t.Errorf("TestAddElement: NewElement() returned nil")
 	}
@@ -101,7 +108,7 @@ func TestAddElement(t *testing.T) {
 	}
 
 	for i := 0; i < 9; i++ {
-		e = NewMyElement("")
+		e = NewMyElement("", 0)
 		a.AddElement(e)
 	}
 	n = a.GetNumElements()
@@ -113,64 +120,64 @@ func TestAddElement(t *testing.T) {
 func TestGetNumElements(t *testing.T) {
 	a := mle_util.NewMleElementArray()
 	if a == nil {
-		t.Errorf("TestAddElement: NewMleElementArray() returned nil")
+		t.Errorf("TestGetNumElements: NewMleElementArray() returned nil")
 	}
 
 	var e mle_util.IMleElement
 
 	for i := 0; i < 10; i++ {
-		e = NewMyElement(strconv.Itoa(i))
+		e = NewMyElement(strconv.Itoa(i), i)
 		a.AddElement(e)
 	}
 	n := a.GetNumElements()
 	if n != 10 {
-		t.Errorf("TestAddElement: want number of elements = 10, got %d", n)
+		t.Errorf("TestGetNumElements: want number of elements = 10, got %d", n)
 	}
 }
 
 func TestGetElementAt(t *testing.T) {
 	a := mle_util.NewMleElementArray()
 	if a == nil {
-		t.Errorf("TestAddElement: NewMleElementArray() returned nil")
+		t.Errorf("TestGetElementAt: NewMleElementArray() returned nil")
 	}
 
 	var e mle_util.IMleElement
 
 	for i := 0; i < 10; i++ {
-		e = NewMyElement(strconv.Itoa(i))
+		e = NewMyElement(strconv.Itoa(i), i)
 		a.AddElement(e)
 	}
 	n := a.GetNumElements()
 	if n != 10 {
-		t.Errorf("TestAddElement: want number of elements = 10, got %d", n)
+		t.Errorf("TestGetElementAt: want number of elements = 10, got %d", n)
 	}
 
 	var v1 = a.GetElementAt(3).(*MyElement)
 	if v1.name != "3" {
-		t.Errorf("TestAddElement: want element = 3, got %s", v1.name)
+		t.Errorf("TestGetElementAt: want element = 3, got %s", v1.name)
 	}
 
 	var v2 = a.GetElementAt(25)
 	if v2 != nil {
-		t.Errorf("TestAddElement: want element = nil")
+		t.Errorf("TestGetElementAt: want element = nil")
 	}
 }
 
 func TestDecrementNumElements(t *testing.T) {
 	a := mle_util.NewMleElementArray()
 	if a == nil {
-		t.Errorf("TestAddElement: NewMleElementArray() returned nil")
+		t.Errorf("TestDecrementNumElements: NewMleElementArray() returned nil")
 	}
 
 	var e mle_util.IMleElement
 
 	for i := 0; i < 10; i++ {
-		e = NewMyElement(strconv.Itoa(i))
+		e = NewMyElement(strconv.Itoa(i), i)
 		a.AddElement(e)
 	}
 	n := a.GetNumElements()
 	if n != 10 {
-		t.Errorf("TestAddElement: want number of elements = 10, got %d", n)
+		t.Errorf("TestDecrementNumElements: want number of elements = 10, got %d", n)
 	}
 
 	for i := 0; i < 3; i++ {
@@ -178,29 +185,56 @@ func TestDecrementNumElements(t *testing.T) {
 	}
 	n = a.GetNumElements()
 	if n != 7 {
-		t.Errorf("TestAddElement: want number of elements = 7, got %d", n)
+		t.Errorf("TestDecrementNumElements: want number of elements = 7, got %d", n)
 	}
 }
 
 func TestToString(t *testing.T) {
 	a := mle_util.NewMleElementArray()
 	if a == nil {
-		t.Errorf("TestAddElement: NewMleElementArray() returned nil")
+		t.Errorf("TestToString: NewMleElementArray() returned nil")
 	}
 
 	var e mle_util.IMleElement
 
 	for i := 0; i < 10; i++ {
-		e = NewMyElement(strconv.Itoa(i))
+		e = NewMyElement(strconv.Itoa(i), i)
 		a.AddElement(e)
 	}
 	n := a.GetNumElements()
 	if n != 10 {
-		t.Errorf("TestAddElement: want number of elements = 10, got %d", n)
+		t.Errorf("TestToString: want number of elements = 10, got %d", n)
 	}
 
 	var str = a.ToString()
 	if str != "( 0 1 2 3 4 5 6 7 8 9 )" {
-		t.Errorf("TestAddElement: want elements = ( 0 1 2 3 4 5 6 7 8 9 ), got %s", str)
+		t.Errorf("TestToString: want elements = ( 0 1 2 3 4 5 6 7 8 9 ), got %s", str)
+	}
+}
+
+func TestIsGreaterThan(t *testing.T) {
+	a := mle_util.NewMleElementArray()
+	if a == nil {
+		t.Errorf("TestIsGreaterThan: NewMleElementArray() returned nil")
+	}
+
+	var e mle_util.IMleElement
+
+	for i := 0; i < 10; i++ {
+		e = NewMyElement(strconv.Itoa(i), i)
+		a.AddElement(e)
+	}
+	n := a.GetNumElements()
+	if n != 10 {
+		t.Errorf("TestIsGreaterThan: want number of elements = 10, got %d", n)
+	}
+
+	status := a.IsGreaterThan(3, 2)
+	if ! status {
+		t.Errorf("TestIsGreaterThan: want false, got true")
+	}
+	status = a.IsGreaterThan(1, 9)
+	if status {
+		t.Errorf("TestIsGreaterThan: want false, got true")
 	}
 }

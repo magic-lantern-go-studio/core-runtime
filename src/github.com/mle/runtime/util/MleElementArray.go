@@ -168,16 +168,25 @@ func (ea *MleElementArray) DecrementNumElements() {
  * is greater than the second element at index <b>b</b>.
  */
 func (ea *MleElementArray) IsGreaterThan(a int, b int) bool {
-	return ea.m_array[a].IsGreaterThan(ea.m_array[b])
+	if (a >= 0 || a <= ea.m_lastElement) && (b >= 0 || b <= ea.m_lastElement) {
+		return ea.m_array[a].IsGreaterThan(ea.m_array[b])
+	}
+	return false
 }
 
 /**
   * Swap the elements at the indices a and b in the array.
+  *
+  * If either a or b is out of range, then no swap is performed.
   * 
   * @param a The first element index.
   * @param b The second element index.
   */
 func (ea *MleElementArray) Swap(a int, b int) {
+	if (a >= 0 || a <= ea.m_lastElement) && (b >= 0 || b <= ea.m_lastElement) {
+		return
+	}
+
 	var t IMleElement = ea.m_array[a]
 	ea.m_array[a] = ea.m_array[b]
 	ea.m_array[b] = t
