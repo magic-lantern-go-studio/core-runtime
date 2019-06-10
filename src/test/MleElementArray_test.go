@@ -258,19 +258,60 @@ func TestSwap(t *testing.T) {
 
 	var v1 = a.GetElementAt(2).(*MyElement)
 	if v1.id != 2 {
-		t.Errorf("TestGetElementAt: want element = 2, got %d", v1.id)
+		t.Errorf("TestSwap: want element = 2, got %d", v1.id)
 	}
 	var v2 = a.GetElementAt(5).(*MyElement)
 	if v2.id != 5 {
-		t.Errorf("TestGetElementAt: want element = 5, got %d", v2.id)
+		t.Errorf("TestSwap: want element = 5, got %d", v2.id)
 	}
 	a.Swap(2, 5)
 	v1 = a.GetElementAt(2).(*MyElement)
 	if v1.id != 5 {
-		t.Errorf("TestGetElementAt: want element = 5, got %d", v1.id)
+		t.Errorf("TestSwap: want element = 5, got %d", v1.id)
 	}
 	v2 = a.GetElementAt(5).(*MyElement)
 	if v2.id != 2 {
-		t.Errorf("TestGetElementAt: want element = 2, got %d", v2.id)
+		t.Errorf("TestSwap: want element = 2, got %d", v2.id)
+	}
+}
+
+func TestCapacity(t *testing.T) {
+	a := mle_util.NewMleElementArray()
+	if a == nil {
+		t.Errorf("TestCapacity: NewMleElementArray() returned nil")
+	}
+
+	cap := a.Capacity()
+	if cap != 0 {
+		t.Errorf("TestCapacity: want capacity = 0, got %d", cap)
+	}
+
+	e := NewMyElement("", 0)
+	if e == nil {
+		t.Errorf("TestCapacity: NewElement() returned nil")
+	}
+	a.AddElement(e)  // Should grow capacity to 64.
+
+	cap = a.Capacity()
+	if cap != 64 {
+		t.Errorf("TestCapacity: want capacity = 64, got %d", cap)
+	}
+}
+
+func TestGrow(t *testing.T) {
+	a := mle_util.NewMleElementArray()
+	if a == nil {
+		t.Errorf("TestGrow: NewMleElementArray() returned nil")
+	}
+
+	cap := a.Capacity()
+	if cap != 0 {
+		t.Errorf("TestGrow: want capacity = 0, got %d", cap)
+	}
+
+	a.Grow(23) // Prime the array for 23 elements.
+	cap = a.Capacity()
+	if cap != 23 {
+		t.Errorf("TestGrow: want capacity = 23, got %d", cap)
 	}
 }

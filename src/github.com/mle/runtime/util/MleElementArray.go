@@ -221,3 +221,8 @@ func (ea *MleElementArray) Grow(size int) bool {
  
 	return result
 }
+
+// Capacity is used to identify the capacity of the MleEventArray.
+func (ea *MleElementArray) Capacity() int {
+	return len(ea.m_array)
+}
