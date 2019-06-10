@@ -78,11 +78,11 @@ const MLE_RESIZE_SET_PRIORITY int = 9
 /** The priority for dispatching the MLE_RESIZEPAINT event for a Stage. */
 const MLE_RESIZEPAINT_STAGE_PRIORITY int = -1
 
-// The singleton instance of the event manager.
-var g_theEventManager *MleEventManager
+// GTheEventManager is the singleton instance of the event manager.
+var GTheEventManager *MleEventManager
     
-// Flag indicating whether it is Ok to exit.
-var g_okToExit bool	
+// GOkToExit is a global flag indicating whether it is Ok to exit.
+var GOkToExit bool
 
 // EventSetItem is a utility class used to manage named events.
 //
@@ -121,13 +121,8 @@ func (esi *EventSetItem) CompareTo(item EventSetItem) int {
 	return 0
 }
 
-/**
- * This class is used to help manage events. A registry is kept for bookkeeping,
- * in order to generate unique event identifiers on-the-fly.
- * 
- * @author Mark S. Millard
- */
-
+// MleEventManager is a class used to help manage events. A registry is kept for bookkeeping,
+// in order to generate unique event identifiers on-the-fly.
 type MleEventManager struct {
 
 }
@@ -135,8 +130,8 @@ type MleEventManager struct {
 // NewMleEventManager is the default constructor that returns a singleton
 // instance of the Event Manager.
 func NewMleEventManager() *MleEventManager {
-	if g_theEventManager == nil {
-		g_theEventManager = new(MleEventManager)
+	if GTheEventManager == nil {
+		GTheEventManager = new(MleEventManager)
 	}
-	return g_theEventManager
+	return GTheEventManager
 }
