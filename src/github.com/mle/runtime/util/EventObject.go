@@ -41,50 +41,57 @@ package util
 
 // Import go packages.
 
-/**
- * The Event class is the abstract root class from which all event state objects shall be derived.
- *
- * All Event's are constructed with a reference to the object, the "source", that is logically
- * deemed to be the object upon which the Event in question initially occurred upon. 
- */
+// EventObject is the abstract root class from which all event state objects shall be derived.
+//
+// All Event's are constructed with a reference to the object, the "source", that is logically
+// deemed to be the object upon which the Event in question initially occurred upon. 
 type EventObject struct {
 	/** The source of the event. */
 	m_source Object
 }
 
-/**
- * The default constructor.
- */
+// NewEventObject is the default constructor.
 func NewEventObject() *EventObject {
 	p := new(EventObject)
 	p.m_source = nil
 	return p
 }
 
-/**
- * Constructs a prototypical Event.
- *
- * @param source The object that the Event occurred upon.
- */
+// NewEventObjectWithSource constructs a prototypical Event.
+//
+// Parameters
+//   source - The object that the Event occurred upon.
 func NewEventObjectWithSource(source Object) *EventObject {
 	p := new(EventObject)
 	p.m_source = source
 	return p
 }
 
-/**
- * Get the source of the Event.
- *
- * @return The object that the Event initially occurred upon.
- */
+// GetSource returns the source of the Event.
+//
+// Return
+//   The object that the Event initially occurred upon. nil
+//   may be returned.
 func (event *EventObject) GetSource() Object {
 	return event.m_source
 }
 
-/**
- * Implement IObject interface.
- */
-func ToString() string {
-	// ToDo: implement string.
+// ToString implements the IObject interface.
+//
+// The ToString method on the Event source will be invoked, if it exists.
+// If the method doesn't exist, then "" will be returned.
+//
+// Return
+//   The value of the Event source ToString method will be returned.
+//   If the Event source does not have a ToString method, then ""
+//   will be returned.
+func (event *EventObject) ToString() string {
+    if event.m_source != nil {
+	    if MethodExists(event.m_source, "ToString") {
+		    value, _ := Invoke(event.m_source, "ToString")
+			var str = value.Interface().(string)
+		    return str
+	    }
+    }
 	return ""
 }

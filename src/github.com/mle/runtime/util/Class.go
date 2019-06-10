@@ -45,12 +45,22 @@ import (
 	"reflect"
 )
 
+// GClassRegistry is a global collection of classes.
+//
 // Since go does not have a "Class" object to determine available classes that can
 // be retrieved using a method like "forName", we create a global list of registered
 // "classes".
 var GClassRegistry map[string]interface{}
 
-// MethodExists will determine if a method exists on the specified interface.
+// MethodExists will determine if a method exists on a specified interface.
+//
+// Parameters
+//   any  - The interface to determine if the named method exists on.
+//   name - The name of the interface to test.
+//
+// Return
+//   true is returned if the named method exists. Otherwise, false will be
+//   returned.
 func MethodExists(any interface{}, name string) bool {
 	method := reflect.ValueOf(any).MethodByName(name)
 	if method.IsValid() {
@@ -59,7 +69,15 @@ func MethodExists(any interface{}, name string) bool {
 	return false
 }
 
-// FieldExists will determine if a field exists on the specified interface.
+// FieldExists will determine if a field exists on a specified interface.
+//
+// Parameters
+//   any  - The interface to determine if the named field exists on.
+//   name - The name of the interface to test.
+//
+// Return
+//   true is returned if the named field exists. Otherwise, false will be
+//   returned.
 func FieldExists(any interface{}, name string) bool {
 	field := reflect.ValueOf(any).FieldByName(name)
 	if field.IsValid() {
@@ -68,7 +86,10 @@ func FieldExists(any interface{}, name string) bool {
 	return false
 }
 
-// Invoke - firstResult, err := Invoke(AnyStructInterface, MethodName, Params...)
+// Invoke is used to call a method on a specified interface.
+//
+// Example
+//   firstResult, err := Invoke(AnyStructInterface, MethodName, Params...)
 func Invoke(any interface{}, name string, args ...interface{}) (reflect.Value, error) {
 	method := reflect.ValueOf(any).MethodByName(name)
 	methodType := method.Type()
