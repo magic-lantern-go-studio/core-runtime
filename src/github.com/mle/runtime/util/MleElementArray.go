@@ -184,12 +184,10 @@ func (ea *MleElementArray) IsGreaterThan(a int, b int) bool {
   */
 func (ea *MleElementArray) Swap(a int, b int) {
 	if (a >= 0 || a <= ea.m_lastElement) && (b >= 0 || b <= ea.m_lastElement) {
-		return
+	    var t IMleElement = ea.m_array[a]
+	    ea.m_array[a] = ea.m_array[b]
+	    ea.m_array[b] = t
 	}
-
-	var t IMleElement = ea.m_array[a]
-	ea.m_array[a] = ea.m_array[b]
-	ea.m_array[b] = t
 }
 
 /**

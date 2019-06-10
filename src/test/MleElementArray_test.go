@@ -238,3 +238,39 @@ func TestIsGreaterThan(t *testing.T) {
 		t.Errorf("TestIsGreaterThan: want false, got true")
 	}
 }
+
+func TestSwap(t *testing.T) {
+	a := mle_util.NewMleElementArray()
+	if a == nil {
+		t.Errorf("TestSwap: NewMleElementArray() returned nil")
+	}
+
+	var e mle_util.IMleElement
+
+	for i := 0; i < 10; i++ {
+		e = NewMyElement(strconv.Itoa(i), i)
+		a.AddElement(e)
+	}
+	n := a.GetNumElements()
+	if n != 10 {
+		t.Errorf("TestSwap: want number of elements = 10, got %d", n)
+	}
+
+	var v1 = a.GetElementAt(2).(*MyElement)
+	if v1.id != 2 {
+		t.Errorf("TestGetElementAt: want element = 2, got %d", v1.id)
+	}
+	var v2 = a.GetElementAt(5).(*MyElement)
+	if v2.id != 5 {
+		t.Errorf("TestGetElementAt: want element = 5, got %d", v2.id)
+	}
+	a.Swap(2, 5)
+	v1 = a.GetElementAt(2).(*MyElement)
+	if v1.id != 5 {
+		t.Errorf("TestGetElementAt: want element = 5, got %d", v1.id)
+	}
+	v2 = a.GetElementAt(5).(*MyElement)
+	if v2.id != 2 {
+		t.Errorf("TestGetElementAt: want element = 2, got %d", v2.id)
+	}
+}
