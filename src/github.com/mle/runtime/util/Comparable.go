@@ -1,6 +1,6 @@
-/*
- * @file EventObject.go
- * Created on June 4, 2019. (msm@wizzerworks.com)
+/**
+ * @file Comparable.go
+ * Created on June 9, 2019. (msm@wizzerworks.com)
  */
 
 // COPYRIGHT_BEGIN
@@ -39,52 +39,14 @@
 // Declare package.
 package util
 
-// Import go packages.
-
-/**
- * The Event class is the abstract root class from which all event state objects shall be derived.
- *
- * All Event's are constructed with a reference to the object, the "source", that is logically
- * deemed to be the object upon which the Event in question initially occurred upon. 
- */
-type EventObject struct {
-	/** The source of the event. */
-	m_source Object
-}
-
-/**
- * The default constructor.
- */
-func NewEventObject() *EventObject {
-	p := new(EventObject)
-	p.m_source = nil
-	return p
-}
-
-/**
- * Constructs a prototypical Event.
- *
- * @param source The object that the Event occurred upon.
- */
-func NewEventObjectWithSource(source Object) *EventObject {
-	p := new(EventObject)
-	p.m_source = source
-	return p
-}
-
-/**
- * Get the source of the Event.
- *
- * @return The object that the Event initially occurred upon.
- */
-func (event *EventObject) GetSource() Object {
-	return event.m_source
-}
-
-/**
- * Implement IObject interface.
- */
-func ToString() string {
-	// ToDo: implement string.
-	return ""
+type Comparable interface {
+	/*
+	 * CompareTo is used to compare the current object with the specified object.
+	 * It returns
+	 *
+	 *   positive integer, if the current object is greater than the specified object.
+     *   negative integer, if the current object is less than the specified object.
+     *   zero, if the current object is equal to the specified object.
+	 */
+	CompareTo(obj Object) int
 }

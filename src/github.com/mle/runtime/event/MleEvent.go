@@ -108,7 +108,7 @@ func GetEventId(cid int) int16 {
  *
  * @param source The object on which the Event initially occurred.
  */
-func NewMleEvent(source *mle_util.Object) *MleEvent {
+func NewMleEvent(source mle_util.Object) *MleEvent {
 	p := new(MleEvent)
 	p.m_event = mle_util.NewEventObjectWithSource(source)
 	p.m_id = MLE_EVENT_INVALID_ID
@@ -125,7 +125,7 @@ func NewMleEvent(source *mle_util.Object) *MleEvent {
  * @param source The object on which the Event initially occurred.
  * @param id The event id.
  */
-func NewMleEventWithId(source *mle_util.Object, id int) *MleEvent {
+func NewMleEventWithId(source mle_util.Object, id int) *MleEvent {
 	p := new(MleEvent)
 	p.m_event = mle_util.NewEventObjectWithSource(source)
 	p.m_id = id
@@ -146,7 +146,7 @@ func NewMleEventWithId(source *mle_util.Object, id int) *MleEvent {
  *   <li>IMleEventCallback.MLE_EVENT_DELAYED</li>
  * </ul>
  */
-func NewMleEventWithIdEvtype(source *mle_util.Object, id int, evType int16) *MleEvent {
+func NewMleEventWithIdEvtype(source mle_util.Object, id int, evType int16) *MleEvent {
 	p := new(MleEvent)
 	p.m_event = mle_util.NewEventObjectWithSource(source)
 	p.m_id = id
@@ -164,7 +164,7 @@ func NewMleEventWithIdEvtype(source *mle_util.Object, id int, evType int16) *Mle
  * @param id The event id.
  * @param calldata The caller data associated with this event.
  */
-func NewMleEventWithIdCalldata(source *mle_util.Object, id int, calldata interface{}) *MleEvent {
+func NewMleEventWithIdCalldata(source mle_util.Object, id int, calldata interface{}) *MleEvent {
 	p := new(MleEvent)
 	p.m_event = mle_util.NewEventObjectWithSource(source)
 	p.m_id = id
@@ -186,7 +186,7 @@ func NewMleEventWithIdCalldata(source *mle_util.Object, id int, calldata interfa
  * </ul>
  * @param calldata The caller data associated with this event.
  */
-func NewMleEventWithIdEvTypeCalldata(source *mle_util.Object, id int, evType int16, calldata interface{}) *MleEvent {
+func NewMleEventWithIdEvTypeCalldata(source mle_util.Object, id int, evType int16, calldata interface{}) *MleEvent {
 	p := new(MleEvent)
 	p.m_event = mle_util.NewEventObjectWithSource(source)
 	p.m_id = id
@@ -250,7 +250,7 @@ func (event *MleEvent) SetCallData(calldata interface{}) {
 	event.m_calldata = calldata
 }
 
-func (event *MleEvent) GetSource() *mle_util.Object {
+func (event *MleEvent) GetSource() mle_util.Object {
     return event.m_event.GetSource()
 }
 

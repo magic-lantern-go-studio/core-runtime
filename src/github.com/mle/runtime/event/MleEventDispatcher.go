@@ -52,7 +52,7 @@ type _EventCBNode struct {
 	/** The callback handler. */
 	m_callback *IMleEventCallback
 	/** The associated client data. */
-	m_clientData *mle_util.Object
+	m_clientData mle_util.Object
 	/** Flag indicating whether event is enabled. */
 	m_isEnabled bool
 }
@@ -719,12 +719,12 @@ func (dispatcher *MleEventDispatcher) ChangeEventPriority(event int, key int) bo
  * <b>true</b> will be returned. Otherwise, <b>false</b> will be
  * returned.
  */
-func (dispatcher *MleEventDispatcher) ProcessEventWithPriority(id int, calldata *mle_util.Object, evType int16, priority int) bool {
+func (dispatcher *MleEventDispatcher) ProcessEventWithPriority(id int, calldata mle_util.Object, evType int16, priority int) bool {
 	var status = false
 	//Todo: Figure out how to make the dispatcher the source of the event.
-	// i.e. var source *mle_util.Object = dispatcher.(mle_util.Object)
-	var source *mle_util.Object
-    var event = NewMleEventWithIdEvTypeCalldata(source, id, evType, calldata)
+	var source mle_util.Object = dispatcher
+	//var source *mle_util.Object
+	var event = NewMleEventWithIdEvTypeCalldata(source, id, evType, calldata)
         
     if event != nil {
         if (evType == MLE_EVENT_IMMEDIATE) {
@@ -782,7 +782,7 @@ func (dispatcher *MleEventDispatcher) ProcessEventWithPriority(id int, calldata 
  * <b>true</b> will be returned. Otherwise, <b>false</b> will be
  * returned.
  */
- func (dispatcher *MleEventDispatcher) ProcessEvent(id int, calldata *mle_util.Object, evType int16) bool {
+ func (dispatcher *MleEventDispatcher) ProcessEvent(id int, calldata mle_util.Object, evType int16) bool {
 		 return dispatcher.ProcessEventWithPriority(id, calldata, evType, 0)
 	 }
  
@@ -797,7 +797,7 @@ func (dispatcher *MleEventDispatcher) ProcessEventWithPriority(id int, calldata 
  * then <b>true</b> will be returned. Otherwise <b>false</b> will be
  * returned.
  */
-func (dispatcher *MleEventDispatcher) PushEvent(event *MleEvent, calldata *mle_util.Object, priority int) bool {
+func (dispatcher *MleEventDispatcher) PushEvent(event *MleEvent, calldata mle_util.Object, priority int) bool {
 	var queueElement = _NewEventQueueElement(event)
 	var element = mle_util.NewMlePQElementWithKey(priority, queueElement)
 	dispatcher.m_eventQueue.Insert(element)
@@ -858,7 +858,7 @@ func (dispatcher *MleEventDispatcher) RemoveListener(listener IMleEventListener)
 	dispatcher.m_eventListeners.RemoveElement(listener);
 }
 
-// Implement IObject interface.
+// ToString implements IObject interface.
 func (dispatcher *MleEventDispatcher) ToString() string {
 	// Todo: return something relavent for Dispatcher.
 	return " "
