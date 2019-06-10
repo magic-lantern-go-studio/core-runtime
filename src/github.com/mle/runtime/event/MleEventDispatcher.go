@@ -696,6 +696,96 @@ func (dispatcher *MleEventDispatcher) ChangeEventPriority(event int, key int) bo
     }
 }
 
+/**
+ * Process the event specified by the event id.
+ * <p>
+ * If the event type associated with the id is MLE_EVENT_IMMDIATE,
+ * then the event will dispatched immediately. If the event type
+ * is MLE_EVENT_DELAYED, then the event will be placed on a priority
+ * queue to be processed at a later date (when dispatchEvents() is
+ * called).
+ * </p><p>
+ * The event will be dispatched with the specified priority if the event
+ * type is MLE_EVENT_DELAYED.
+ * </p>
+ *
+ * @param id The composite event identifier.
+ * @param calldata An Object containing the data to
+ * be processed along with the event.
+ * @param type The type of dispatching to use.
+ * @param priority The event dispatch priority.
+ *
+ * @return If the event is successfully processed, then
+ * <b>true</b> will be returned. Otherwise, <b>false</b> will be
+ * returned.
+ */
+func (dispatcher *MleEventDispatcher) ProcessEventWithPriority(id int, calldata *mle_util.Object, evType int16, priority int) bool {
+	var status = false
+	//Todo: Figure out how to make the dispatcher the source of the event.
+	// i.e. var source *mle_util.Object = dispatcher.(mle_util.Object)
+	var source *mle_util.Object
+    var event = NewMleEventWithIdEvTypeCalldata(source, id, evType, calldata)
+        
+    if event != nil {
+        if (evType == MLE_EVENT_IMMEDIATE) {
+            // Dispatch event immediately.
+            node := dispatcher.findEventNode(id)
+            if (node != nil) && (node.m_isEnabled) {
+                // Execute each callback that has been installed for this event
+                // a priori.
+
+                // Copy the queue into one we can process.
+                processQ := mle_util.NewMlePQWithElements(node.m_callbacks.CopyQueue())
+                for ! processQ.IsEmpty() {
+                    var item *mle_util.MlePQElement = processQ.Remove()
+                    var cbNode = item.Data.(*_EventCBNode)
+                    if (cbNode != nil) && (cbNode.IsEnabled()) {
+                        cb := cbNode.m_callback
+                        status = (*cb).Dispatch(*event, cbNode.m_clientData)
+                    }
+                }
+                    
+                // Notify listeners.
+                for i := 0; i < len(*dispatcher.m_eventListeners); i++ {
+					listener := dispatcher.m_eventListeners.ElementAt(i).(IMleEventListener)
+					listener.EventProcessed(event)
+				}
+            }
+        } else if (evType == MLE_EVENT_DELAYED) {
+            /* Push event onto delayed queue. */
+            status = dispatcher.PushEvent(event, calldata, priority)
+        }
+    }
+        
+	return status
+}
+
+/**
+ * Process the event specified by the event id.
+ * <p>
+ * If the event type associated with the id is MLE_EVENT_IMMEDIATE,
+ * then the event will dispatched immediately. If the event type
+ * is MLE_EVENT_DELAYED, then the event will be placed on a priority
+ * queue to be processed at a later date (when DispatchEvents() is
+ * called).
+ * </p><p>
+ * The event will be dispatched with the default priority if the event
+ * type is MLE_EVENT_DELAYED.
+ * </p>
+ *
+ * @param id The composite event identifier.
+ * @param calldata An Object containing the data to
+ * be processed along with the event.
+ * @param type The type of dispatching to use.
+ *
+ * @return If the event is successfully processed, then
+ * <b>true</b> will be returned. Otherwise, <b>false</b> will be
+ * returned.
+ */
+ func (dispatcher *MleEventDispatcher) ProcessEvent(id int, calldata *mle_util.Object, evType int16) bool {
+		 return dispatcher.ProcessEventWithPriority(id, calldata, evType, 0)
+	 }
+ 
 /*
  * Push the event onto the queue for delayed dispatching.
  *
@@ -766,4 +856,10 @@ func (dispatcher *MleEventDispatcher) RemoveListener(listener IMleEventListener)
 		return
 	}
 	dispatcher.m_eventListeners.RemoveElement(listener);
+}
+
+// Implement IObject interface.
+func (dispatcher *MleEventDispatcher) ToString() string {
+	// Todo: return something relavent for Dispatcher.
+	return " "
 }
