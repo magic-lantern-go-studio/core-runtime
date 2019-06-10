@@ -98,11 +98,13 @@ func NewMleElementArrayWithSize(size int) *MleElementArray {
 func (ea *MleElementArray) ToString() string {
 	var buf bytes.Buffer
 
-    buf.WriteString("(")
-	for i := 0; i < len(ea.m_array); i++ {
+	buf.WriteString("( ")
+	var size = ea.m_lastElement + 1
+	for i := 0; i < size; i++ {
 		buf.WriteString(ea.m_array[i].ToString())
 		buf.WriteString(" ")
 	}
+	buf.WriteString(")")
 	
 	return buf.String()
 }
@@ -128,7 +130,13 @@ func (ea *MleElementArray) AddElement(n IMleElement) {
  * @return A reference to an <code>IMleElement</code> is returned.
  */
 func (ea *MleElementArray) GetElementAt(k int) IMleElement {
-    return ea.m_array[k]
+	var v IMleElement
+	if k < 0 || k > ea.m_lastElement {
+		v = nil
+	} else {
+        v = ea.m_array[k]
+	}
+    return v
 }
 
 /**
@@ -142,6 +150,8 @@ func (ea *MleElementArray) GetNumElements() int {
 	
 /** 
  * Register that the last element has been removed.
+ *
+ * The last element in the array is dropped.
  */
 func (ea *MleElementArray) DecrementNumElements() {
     ea.m_array[ea.m_lastElement] = nil
