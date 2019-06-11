@@ -37,7 +37,7 @@
 // COPYRIGHT_END
 
 // Declare package.
-package core_test
+package util_test
 
 import (
 	"testing"
