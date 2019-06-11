@@ -436,3 +436,8 @@ func (ha *MleHeapArray) Swap(a int, b int) {
 func (ha *MleHeapArray) Grow(size int) bool {
 	return ha.m_array.Grow(size)
 }
+
+// ToString implements the IObject interface.
+func (ha *MleHeapArray) ToString() string {
+	return ha.m_array.ToString()
+}

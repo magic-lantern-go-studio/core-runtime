@@ -46,25 +46,25 @@ import (
 	mle_util "github.com/mle/runtime/util"
 )
 
-type MyElement struct {
+type ea_MyElement struct {
 	name string
 	id int
 }
 
-func NewMyElement(name string, id int) *MyElement {
-	p := new(MyElement)
+func ea_NewMyElement(name string, id int) *ea_MyElement {
+	p := new(ea_MyElement)
 	p.name = name
 	p.id = id
 	return p
 }
 
-func (e *MyElement) ToString() string {
+func (e *ea_MyElement) ToString() string {
 	return e.name
 }
 
-func (e *MyElement)  IsGreaterThan(element mle_util.IMleElement) bool {
+func (e *ea_MyElement)  IsGreaterThan(element mle_util.IMleElement) bool {
 	e1 := e.id
-	e2 := element.(*MyElement).id
+	e2 := element.(*ea_MyElement).id
 	if e1 > e2 {
 		return true
 	}
@@ -92,7 +92,7 @@ func TestAddElement(t *testing.T) {
 		t.Errorf("TestAddElement: NewMleElementArray() returned nil")
 	}
 
-	e := NewMyElement("", 0)
+	e := ea_NewMyElement("", 0)
 	if e == nil {
 		t.Errorf("TestAddElement: NewElement() returned nil")
 	}
@@ -108,7 +108,7 @@ func TestAddElement(t *testing.T) {
 	}
 
 	for i := 0; i < 9; i++ {
-		e = NewMyElement("", 0)
+		e = ea_NewMyElement("", 0)
 		a.AddElement(e)
 	}
 	n = a.GetNumElements()
@@ -126,7 +126,7 @@ func TestGetNumElements(t *testing.T) {
 	var e mle_util.IMleElement
 
 	for i := 0; i < 10; i++ {
-		e = NewMyElement(strconv.Itoa(i), i)
+		e = ea_NewMyElement(strconv.Itoa(i), i)
 		a.AddElement(e)
 	}
 	n := a.GetNumElements()
@@ -144,7 +144,7 @@ func TestGetElementAt(t *testing.T) {
 	var e mle_util.IMleElement
 
 	for i := 0; i < 10; i++ {
-		e = NewMyElement(strconv.Itoa(i), i)
+		e = ea_NewMyElement(strconv.Itoa(i), i)
 		a.AddElement(e)
 	}
 	n := a.GetNumElements()
@@ -152,7 +152,7 @@ func TestGetElementAt(t *testing.T) {
 		t.Errorf("TestGetElementAt: want number of elements = 10, got %d", n)
 	}
 
-	var v1 = a.GetElementAt(3).(*MyElement)
+	var v1 = a.GetElementAt(3).(*ea_MyElement)
 	if v1.name != "3" {
 		t.Errorf("TestGetElementAt: want element = 3, got %s", v1.name)
 	}
@@ -172,7 +172,7 @@ func TestDecrementNumElements(t *testing.T) {
 	var e mle_util.IMleElement
 
 	for i := 0; i < 10; i++ {
-		e = NewMyElement(strconv.Itoa(i), i)
+		e = ea_NewMyElement(strconv.Itoa(i), i)
 		a.AddElement(e)
 	}
 	n := a.GetNumElements()
@@ -198,7 +198,7 @@ func TestToString(t *testing.T) {
 	var e mle_util.IMleElement
 
 	for i := 0; i < 10; i++ {
-		e = NewMyElement(strconv.Itoa(i), i)
+		e = ea_NewMyElement(strconv.Itoa(i), i)
 		a.AddElement(e)
 	}
 	n := a.GetNumElements()
@@ -221,7 +221,7 @@ func TestIsGreaterThan(t *testing.T) {
 	var e mle_util.IMleElement
 
 	for i := 0; i < 10; i++ {
-		e = NewMyElement(strconv.Itoa(i), i)
+		e = ea_NewMyElement(strconv.Itoa(i), i)
 		a.AddElement(e)
 	}
 	n := a.GetNumElements()
@@ -248,7 +248,7 @@ func TestSwap(t *testing.T) {
 	var e mle_util.IMleElement
 
 	for i := 0; i < 10; i++ {
-		e = NewMyElement(strconv.Itoa(i), i)
+		e = ea_NewMyElement(strconv.Itoa(i), i)
 		a.AddElement(e)
 	}
 	n := a.GetNumElements()
@@ -256,20 +256,20 @@ func TestSwap(t *testing.T) {
 		t.Errorf("TestSwap: want number of elements = 10, got %d", n)
 	}
 
-	var v1 = a.GetElementAt(2).(*MyElement)
+	var v1 = a.GetElementAt(2).(*ea_MyElement)
 	if v1.id != 2 {
 		t.Errorf("TestSwap: want element = 2, got %d", v1.id)
 	}
-	var v2 = a.GetElementAt(5).(*MyElement)
+	var v2 = a.GetElementAt(5).(*ea_MyElement)
 	if v2.id != 5 {
 		t.Errorf("TestSwap: want element = 5, got %d", v2.id)
 	}
 	a.Swap(2, 5)
-	v1 = a.GetElementAt(2).(*MyElement)
+	v1 = a.GetElementAt(2).(*ea_MyElement)
 	if v1.id != 5 {
 		t.Errorf("TestSwap: want element = 5, got %d", v1.id)
 	}
-	v2 = a.GetElementAt(5).(*MyElement)
+	v2 = a.GetElementAt(5).(*ea_MyElement)
 	if v2.id != 2 {
 		t.Errorf("TestSwap: want element = 2, got %d", v2.id)
 	}
@@ -286,7 +286,7 @@ func TestCapacity(t *testing.T) {
 		t.Errorf("TestCapacity: want capacity = 0, got %d", cap)
 	}
 
-	e := NewMyElement("", 0)
+	e := ea_NewMyElement("", 0)
 	if e == nil {
 		t.Errorf("TestCapacity: NewElement() returned nil")
 	}
