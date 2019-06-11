@@ -39,6 +39,7 @@
 // Declare package.
 package util_test
 
+// Import go packages.
 import (
 	"strconv"
 	"testing"
@@ -148,5 +149,158 @@ func TestClear(t *testing.T) {
 	//TestCase.assertEquals(0,pq.getNumElements());
 	if pq.GetNumElements() != 0 {
 		t.Errorf("TestClear: want number of elements = 0, got %d", pq.GetNumElements())
+	}
+}
+
+/**
+ * Test the remove() methods.
+ */
+func TestRemove(t *testing.T) {
+	pq := mle_util.NewMlePQWithSize(10)
+
+ 	t.Logf("TestRemove: Remove Item Test\n")
+			 
+	for i := 0; i < 10; i++ {
+		pq.Insert(mle_util.NewMlePQElementWithKey(i,nil))
+	}
+	pq.Insert(mle_util.NewMlePQElementWithKey(5,nil))
+	pq.Insert(mle_util.NewMlePQElementWithKey(5,nil))
+	pq.Insert(mle_util.NewMlePQElementWithKey(5,nil))
+	pq.Insert(mle_util.NewMlePQElementWithKey(5,nil))
+			 
+	element := pq.Remove()
+	//TestCase.assertEquals(new Integer(9).toString(),element.toString())
+	if element.ToString() != "9" {
+		t.Errorf("TestRemove: want element = 9, got %s", element.ToString())
+	}
+	
+	// Removing all elements with priority 5.
+	elements := pq.RemoveWithPriority(5)
+	for i := 0; i < 5; i++ {
+		//TestCase.assertEquals(new Integer(5).toString(),elements[i].toString())
+		if elements[i].ToString() != "5" {
+			t.Errorf("TestRemove: want element = 5, got %s", elements[i].ToString())
+		}
+	}
+}
+
+/**
+ * Test the Join() method.
+ */
+func TestJoin(t *testing.T) {
+	pq1 := mle_util.NewMlePQ()
+	pq2 := mle_util.NewMlePQ()
+	var result *mle_util.MlePQ
+ 
+	t.Logf("TestJoin: Join Queues Test\n")
+			 
+	for i := 0; i < 10; i++ {
+		pq1.Insert(mle_util.NewMlePQElementWithKey(i,nil))
+		pq2.Insert(mle_util.NewMlePQElementWithKey(i+25,nil))
+	}
+			 
+	result = mle_util.Join(*pq1, *pq2)
+			 
+	element := result.Remove()
+	//TestCase.assertEquals(new Integer(34).toString(),element.toString());
+	if element.ToString() != "34" {
+		t.Errorf("TestJoin: want element = 34, got %s", element.ToString())
+	}
+}
+
+/**
+ * Test the changeItem() method.
+ */
+func TestChangeItem(t *testing.T) {
+	pq := mle_util.NewMlePQWithSize(10)
+			 
+	t.Logf("TestJoin: Change Item Test\n")
+			 
+	for i := 0; i < 10; i++ {
+		pq.Insert(mle_util.NewMlePQElementWithKey(i,nil))
+	}
+ 
+	// Crank priority to 56.
+	pq.ChangeItem(pq.FindItemWithPriority(5),56)
+			 
+	element := pq.Remove()
+	//TestCase.assertEquals(new Integer(56).toString(),element.toString());
+	if element.ToString() != "56" {
+		t.Errorf("TestJoin: want element = 56, got %s", element.ToString())
+	}
+}
+
+/**
+ * Test the Destroy() methods.
+ */
+func TestDestroy(t *testing.T) {
+	pq := mle_util.NewMlePQWithSize(10)
+
+	t.Logf("TestDestroy: Destroy Test\n")
+			 
+	for i := 0; i < 10; i++ {
+		pq.Insert(mle_util.NewMlePQElementWithKey(i,nil))
+	}
+ 
+	// Destroy item with priority 5.
+	pq.DestroyItemWithPriority(5)
+			 
+	k := pq.FindItemWithPriority(5)
+	if k != -1 {
+		t.Errorf("TestDestroy: want element = -1, got %d", k)
+	}
+			 
+	// Destroy the top 3 priority items.
+	pq.Destroy()
+	pq.Destroy()
+	pq.Destroy()
+		 
+	element := pq.Remove()
+	//TestCase.assertEquals(new Integer(6).toString(),element.toString());
+	if element.ToString() != "6" {
+		t.Errorf("TestDestroy: want element = 6, got %s", element.ToString())
+	}
+}
+
+/**
+ * Test the destroyItem() method.
+ */
+func TestDestoryItem(t *testing.T) {
+	pq := mle_util.NewMlePQWithSize(mle_util.MLE_INC_QSIZE)
+ 
+	t.Logf("TestDestroyItem: Destroy Item Test\n")
+			 
+	for i := 0; i < mle_util.MLE_INC_QSIZE; i++ {
+		pq.Insert(mle_util.NewMlePQElementWithKey(i,nil))
+	}
+			 
+	pq.DestroyItem(pq.FindItemWithPriority(10))
+	pq.DestroyItem(pq.FindItemWithPriority(20))
+	pq.DestroyItem(pq.FindItemWithPriority(30))
+	pq.DestroyItem(pq.FindItemWithPriority(40))
+	//TestCase.assertEquals(60,pq.getNumElements());
+	if pq.GetNumElements() != 60 {
+		t.Errorf("TestDestroyItem: want number of elements = 60, got %d", pq.GetNumElements())
+	}
+			 
+	k := pq.FindItemWithPriority(10)
+	//TestCase.assertEquals(-1,k);
+	if k != -1 {
+		t.Errorf("TestDestroyItem: want element = -1, got %d", k)
+	}
+	k = pq.FindItemWithPriority(20);
+	//TestCase.assertEquals(-1,k);
+	if k != -1 {
+		t.Errorf("TestDestroyItem: want element = -1, got %d", k)
+	}
+	k = pq.FindItemWithPriority(30);
+	//TestCase.assertEquals(-1,k);
+	if k != -1 {
+		t.Errorf("TestDestroyItem: want element = -1, got %d", k)
+	}
+	k = pq.FindItemWithPriority(40);
+	//TestCase.assertEquals(-1,k);
+	if k != -1 {
+		t.Errorf("TestDestroyItem: want element = -1, got %d", k)
 	}
 }
