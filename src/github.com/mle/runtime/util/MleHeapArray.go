@@ -52,9 +52,11 @@ import (
  * <li>test for emptiness of heaptree</li>
  * <li>swap</li>
  * </ul>
+ *
+ * Extends MleElementArray.
  */
 type MleHeapArray struct {
-	m_array *MleElementArray  // MleHeapArray extends MleElementArray extends
+	m_array *MleElementArray
 
 	// Heap tree root stored at index 0.
 	m_rootIndex int
@@ -435,6 +437,11 @@ func (ha *MleHeapArray) Swap(a int, b int) {
  */
 func (ha *MleHeapArray) Grow(size int) bool {
 	return ha.m_array.Grow(size)
+}
+
+// Capacity is used to identify the capacity of the MleHeapArray.
+func (ha *MleHeapArray) Capacity() int {
+	return ha.m_array.Capacity()
 }
 
 // ToString implements the IObject interface.

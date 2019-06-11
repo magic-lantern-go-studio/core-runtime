@@ -40,7 +40,9 @@
 package util
 
 /**
- *  Implements a Priority Queue using a heap tree.
+ * Implements a Priority Queue using a heap tree.
+ *
+ * Extends MleHeapArray.
  */
 type MlePriorityQueue struct {
     m_array *MleHeapArray  // MlePriorityQueue extends MleHeapArray.
@@ -192,4 +194,9 @@ func (pq *MlePriorityQueue) Swap(a int, b int) {
  */
 func (pq *MlePriorityQueue) IsEmpty() bool {
 	return pq.m_array.heapEmpty()
+}
+
+// Capacity is used to identify the capacity of the MlePriorityQueue.
+func (pq *MlePriorityQueue) Capacity() int {
+	return pq.m_array.Capacity()
 }

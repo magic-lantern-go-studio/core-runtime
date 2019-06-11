@@ -40,6 +40,7 @@
 package util_test
 
 import (
+	"strconv"
 	"testing"
 
 	mle_util "github.com/mle/runtime/util"
@@ -100,5 +101,52 @@ func TestInsertionRemoval(t *testing.T) {
 	//TestCase.assertEquals(new Integer(4).toString(),n4.toString())
 	if n4.ToString() != "4" {
 		t.Errorf("TestInsertionRemoval: want element = 4, got %s", n4.ToString())
+	}
+}
+
+/**
+ *  Test queue growth.
+ */
+func TestQueueGrowth(t *testing.T) {
+	pq := mle_util.NewMlePQWithSize(mle_util.MLE_INC_QSIZE)
+ 
+	t.Logf("TestQueueGrowth: Queue Growth Test\n")
+			 
+	for i := 0; i < mle_util.MLE_INC_QSIZE; i++	{
+		pq.Insert(mle_util.NewMlePQElementWithKey(i,nil))
+	}
+	pq.Insert(mle_util.NewMlePQElementWithKey(mle_util.MLE_INC_QSIZE,nil))
+	cap := pq.Capacity()
+	if cap != 128 {
+		t.Errorf("TestQueueGrowth: want capacity = 128, got %d", cap)
+	}
+			 
+	for i :=  mle_util.MLE_INC_QSIZE; i >= 0;  i-- {
+		element := pq.Remove()
+		t.Logf("TestQueueGrowth: element %d %s\n", i, element.ToString())
+		//TestCase.assertEquals(new Integer(i).toString(),element.toString())
+		if element.ToString() != strconv.Itoa(i) {
+			t.Errorf("TestQueueGrowth: want element = %s, got %s", strconv.Itoa(i), element.ToString())
+		}
+	}
+}
+
+/**
+ * Test the clear() method.
+ */
+func TestClear(t *testing.T) {
+	pq := mle_util.NewMlePQWithSize(mle_util.MLE_INC_QSIZE)
+
+ 	t.Logf("TestClear: Clear Test\n")
+			 
+	for i := 0; i < mle_util.MLE_INC_QSIZE; i++ {
+		pq.Insert(mle_util.NewMlePQElementWithKey(i,nil))
+	}
+			 
+	pq.Clear()
+			 
+	//TestCase.assertEquals(0,pq.getNumElements());
+	if pq.GetNumElements() != 0 {
+		t.Errorf("TestClear: want number of elements = 0, got %d", pq.GetNumElements())
 	}
 }

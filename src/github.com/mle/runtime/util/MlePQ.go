@@ -47,10 +47,10 @@ const MLE_MIN_QPRIORITY int = ^32767
 /**
  * This class implements a priority queue.
  * 
- * @author Mark S. Millard
+ * Extends MlePriorityQueue.
  */
 type MlePQ struct {
-	m_queue *MlePriorityQueue  // MlePQ extends MlePriorityQueue.
+	m_queue *MlePriorityQueue 
 }
 
 /**
@@ -101,6 +101,11 @@ func (pq *MlePQ) GetElementAt(k int) *MlePQElement {
  */
 func (pq *MlePQ) GetNumElements() int {
     return pq.m_queue.GetNumElements()
+}
+
+// Capacity is used to identify the capacity of the MlePQ.
+func (pq *MlePQ) Capacity() int {
+	return pq.m_queue.Capacity()
 }
 
 /**
