@@ -41,6 +41,7 @@ package event
 
 // Import Magic Lantern packages.
 import (
+	mle_util "github.com/mle/runtime/util"
 	mle_core "github.com/mle/runtime/core"
 )
 
@@ -74,5 +75,5 @@ type IMleEventCallback interface {
 	 * @return If the event is successfully dispatched, then <b>true</b>
 	 * is returned. Otherwise, <b>false</b> should be returned.
 	 */
-	Dispatch(event MleEvent, clientdata interface{}) bool
+	Dispatch(event MleEvent, clientdata mle_util.IObject) bool
 }

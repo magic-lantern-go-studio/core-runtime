@@ -52,7 +52,7 @@ type _EventCBNode struct {
 	/** The callback handler. */
 	m_callback *IMleEventCallback
 	/** The associated client data. */
-	m_clientData mle_util.Object
+	m_clientData mle_util.IObject
 	/** Flag indicating whether event is enabled. */
 	m_isEnabled bool
 }
@@ -304,12 +304,14 @@ func (dispatcher *MleEventDispatcher) findEventNode(id int) *_EventNode {
 	var value interface{}
 	var err error
 	value, err =  dispatcher.m_eventGroups.Get(key)
-	_ = err
-	var group *_EventGroupNode = value.(*_EventGroupNode)
-	if group != nil {
-		node = group.findEventNode(id)
-	}
+	if err == nil {
+	    var group *_EventGroupNode = value.(*_EventGroupNode)
+	    if group != nil {
+		    node = group.findEventNode(id)
+	    }
+    }
 	
+	// nil may be returned for the value.
 	return node
 }
 
@@ -319,19 +321,22 @@ func (dispatcher *MleEventDispatcher) addEventNode(node *_EventNode) {
 	var key hash_types.Int16 = hash_types.Int16(groupId)
 
 	// Get the associated group.
+	var group *_EventGroupNode
 	var value interface{}
 	var err error
 	value, err = dispatcher.m_eventGroups.Get(key)
-	_ = err
-    var group *_EventGroupNode = value.(*_EventGroupNode)
-    if group == nil {
+	if err != nil {
         // No group by this id, create a new one.
         group = _NewEventGroupNode()
         dispatcher.m_eventGroups.Put(key, group)
                 
         node.m_group = group
-    }
-         
+	} else {
+		// Group exists for this id.
+        group = value.(*_EventGroupNode)
+	}
+	
+	// Add the node to the group.
     group.linkEventNode(node)
 }
      
@@ -380,7 +385,7 @@ func (dispatcher *MleEventDispatcher) findEventCBNode(node *_EventNode, id *_Eve
  * @throws MleRuntimeException This exception is thrown if the
  * callback can not be installed successfully.
  */
-func (dispatcher *MleEventDispatcher) InstallEventCB(event int, callback IMleEventCallback, clientData *mle_util.Object) (mle_core.IMleCallbackId, *mle_core.MleError) {
+func (dispatcher *MleEventDispatcher) InstallEventCB(event int, callback IMleEventCallback, clientData mle_util.IObject) (mle_core.IMleCallbackId, *mle_core.MleError) {
     var node *_EventNode
  // Check if event node already exists.
 	node = dispatcher.findEventNode(event)

@@ -273,3 +273,7 @@ func (event *MleEvent) String() string {
 	str := fmt.Sprintf("%s%d%s%s", "MleEvent: id=", event.m_id, " : type=", evType)
 	return str
 }
+
+func (event *MleEvent) ToString() string {
+	return event.String()
+}

@@ -47,7 +47,7 @@ import (
 	mle_util "github.com/mle/runtime/util"
 )
 
-func TestNewPQ(t *testing.T) {
+func TestNewMlePQ(t *testing.T) {
 	// Construct an empty queue.
 	q := mle_util.NewMlePQ()
 	if q == nil {
