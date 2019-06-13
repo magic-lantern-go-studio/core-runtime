@@ -37,7 +37,7 @@
 // COPYRIGHT_END
 
 // Declare package.
-package util_test
+package mle_test
 
 // Import go packages.
 import (

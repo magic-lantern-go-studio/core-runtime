@@ -75,8 +75,11 @@ type MleEvent struct {
  * @return The composite event identifier is returned.
  */
 func MakeId(group int16, id int16) int {
-	var newId int = (int)((group << 16) | id)
-	return newId
+	//var newId int = (int)((group << 16) | id)
+	var a  = int(group)
+	a = a<<16
+	var b = a | int(id)
+	return b
 }
 
 /**
@@ -87,7 +90,7 @@ func MakeId(group int16, id int16) int {
  * @return The group that the event belongs to is returned.
  */
 func GetGroupId(cid int) int16 {
-	var groupId int16 = (int16)(cid >> 16)
+	var groupId int16 = int16(cid >> 16)
 	return groupId
 }
 
@@ -99,7 +102,7 @@ func GetGroupId(cid int) int16 {
  * @return The event id is returned.
  */
 func GetEventId(cid int) int16 {
-	var eventId int16 = (int16)(cid & 0x00FF)
+	var eventId int16 = int16(cid & 0x00FF)
 	return eventId
 }
 

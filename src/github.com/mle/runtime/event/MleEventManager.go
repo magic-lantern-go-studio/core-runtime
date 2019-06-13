@@ -42,6 +42,7 @@ package event
 // Import go packages.
 import (
 	"github.com/timtadh/data-structures/types"
+	"github.com/timtadh/data-structures/tree/avl"
 	mle_util "github.com/mle/runtime/util"
 	mle_core "github.com/mle/runtime/core"
 )
@@ -152,6 +153,7 @@ type EventSet struct {
 // NewEventSet is the default constructor.
 func NewEventSet() *EventSet {
 	p := new(EventSet)
+	p.m_tree = avl.NewAvlTree()
 	return p
 }
 
