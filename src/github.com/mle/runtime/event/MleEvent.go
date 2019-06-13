@@ -62,7 +62,7 @@ type MleEvent struct {
 	/** The event dispatch type. */
 	m_type int16
 	/** Call data assoicated with the event. */
-	m_calldata interface{}
+	m_calldata mle_util.IObject
 }
 
 /**
@@ -164,7 +164,7 @@ func NewMleEventWithIdEvtype(source mle_util.Object, id int, evType int16) *MleE
  * @param id The event id.
  * @param calldata The caller data associated with this event.
  */
-func NewMleEventWithIdCalldata(source mle_util.Object, id int, calldata interface{}) *MleEvent {
+func NewMleEventWithIdCalldata(source mle_util.Object, id int, calldata mle_util.IObject) *MleEvent {
 	p := new(MleEvent)
 	p.m_event = mle_util.NewEventObjectWithSource(source)
 	p.m_id = id
@@ -186,7 +186,7 @@ func NewMleEventWithIdCalldata(source mle_util.Object, id int, calldata interfac
  * </ul>
  * @param calldata The caller data associated with this event.
  */
-func NewMleEventWithIdEvTypeCalldata(source mle_util.Object, id int, evType int16, calldata interface{}) *MleEvent {
+func NewMleEventWithIdEvTypeCalldata(source mle_util.Object, id int, evType int16, calldata mle_util.IObject) *MleEvent {
 	p := new(MleEvent)
 	p.m_event = mle_util.NewEventObjectWithSource(source)
 	p.m_id = id
@@ -237,7 +237,7 @@ func (event *MleEvent) SetType(evType int16) {
  *
  * @return An Object is returned encapsulating the client data.
  */
-func (event *MleEvent) GetCallData() interface{} {
+func (event *MleEvent) GetCallData() mle_util.IObject {
 	return event.m_calldata
 }
 
@@ -246,10 +246,16 @@ func (event *MleEvent) GetCallData() interface{} {
  *
  * @param calldata An Object containing the caller data.
  */
-func (event *MleEvent) SetCallData(calldata interface{}) {
+func (event *MleEvent) SetCallData(calldata mle_util.IObject) {
 	event.m_calldata = calldata
 }
 
+// GetSource is used to obtain the source oject that is associated with
+// generating the event.
+//
+// Return
+//
+//   An Object interface is returned
 func (event *MleEvent) GetSource() mle_util.Object {
     return event.m_event.GetSource()
 }

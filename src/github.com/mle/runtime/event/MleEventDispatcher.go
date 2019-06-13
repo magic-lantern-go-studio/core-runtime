@@ -612,7 +612,7 @@ func (dispatcher *MleEventDispatcher) DisableEvent(event int) bool {
  * <b>true</b> will be returned. Otherwise, <b>false</b> will be
  * returned.
  */
-func (dispatcher *MleEventDispatcher) changeCBPriority(event int, id mle_core.IMleCallbackId, key int) bool {
+func (dispatcher *MleEventDispatcher) ChangeCBPriority(event int, id mle_core.IMleCallbackId, key int) bool {
 	var node *_EventNode
 	var result bool
  
@@ -724,7 +724,7 @@ func (dispatcher *MleEventDispatcher) ChangeEventPriority(event int, key int) bo
  * <b>true</b> will be returned. Otherwise, <b>false</b> will be
  * returned.
  */
-func (dispatcher *MleEventDispatcher) ProcessEventWithPriority(id int, calldata mle_util.Object, evType int16, priority int) bool {
+func (dispatcher *MleEventDispatcher) ProcessEventWithPriority(id int, calldata mle_util.IObject, evType int16, priority int) bool {
 	var status = false
 	//Todo: Figure out how to make the dispatcher the source of the event.
 	var source mle_util.Object = dispatcher
@@ -787,7 +787,7 @@ func (dispatcher *MleEventDispatcher) ProcessEventWithPriority(id int, calldata 
  * <b>true</b> will be returned. Otherwise, <b>false</b> will be
  * returned.
  */
- func (dispatcher *MleEventDispatcher) ProcessEvent(id int, calldata mle_util.Object, evType int16) bool {
+ func (dispatcher *MleEventDispatcher) ProcessEvent(id int, calldata mle_util.IObject, evType int16) bool {
 		 return dispatcher.ProcessEventWithPriority(id, calldata, evType, 0)
 	 }
  

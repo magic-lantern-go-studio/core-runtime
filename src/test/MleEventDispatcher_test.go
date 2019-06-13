@@ -122,11 +122,15 @@ func (s *_State) Dispatch(event mle_event.MleEvent, clientData mle_util.IObject)
 	buf.WriteString("Executing Callback: ")
 	buf.WriteString(s.mName + "\n")
 	buf.WriteString("\tCaller Data: ")
-	//buf.WriteString(event.GetCallData().String() + "\n")
+	buf.WriteString(event.GetCallData().String() + "\n")
 	buf.WriteString("\tClient Data: ")
 	buf.WriteString(clientData.String())
 	s.t.Logf(buf.String())
-	s.mState = event.GetId()
+	//s.mState = event.GetId()
+	if s.mState != mle_event.MLE_EVENT_INVALID_ID {
+		// A state, other than invalid, was never defined for this callback.
+		s.t.Errorf("Dispatch: expected %d, got %d", s.mState, event.GetId())
+	}
 				 
 	return retValue
 }
@@ -169,8 +173,23 @@ func mainloop() {
 	for i := 0; i < len(_states); i++ {
 		var buf bytes.Buffer
 		buf.WriteString("Processing State = " + strconv.Itoa(_states[i]))
-		_machine.ProcessEvent(_states[i], buf.String(), mle_event.MLE_EVENT_IMMEDIATE);
+		callData := newCallData(buf.String())
+		_machine.ProcessEvent(_states[i], callData, mle_event.MLE_EVENT_IMMEDIATE)
 	}
+}
+
+type callData struct {
+	mData string
+}
+
+func newCallData(str string) *callData {
+	p := new(callData)
+	p.mData = str
+	return p
+}
+
+func (cd *callData) String() string {
+	return cd.mData
 }
 
 type clientData struct {
@@ -215,7 +234,7 @@ func initStateMachine(cb *_State) {
 
 /**
  * Test the MleEventDispatcher using a simple state machine.
- * Process the events in MLE_IMMEDIATE_MODE;
+ * Process the events in MLE_IMMEDIATE_MODE.
  */
 func TestImmediateMode(t *testing.T) {
 	// Create the state machine callback handlers.
@@ -227,4 +246,117 @@ func TestImmediateMode(t *testing.T) {
 	t.Logf("TestImmediateMode: processing events.")
 	mainloop();
 }
- 
+
+/**
+ * Test the MleEventDispatcher using a simple state machine.
+ * Process the events in MLE_DELAYED_MODE.
+ */
+func TestDelayedMode(t *testing.T) {
+	// Create the state machine callback handlers.
+	var stateCB = _NewState(t)
+
+	initStateMachine(stateCB);
+            
+    // Process the state machine.
+    for i := 0; i < len(_states); i++ {
+		var buf bytes.Buffer
+		buf.WriteString("Processing State = " + strconv.Itoa(_states[i]))
+		callData := newCallData(buf.String())
+		_machine.ProcessEventWithPriority(_states[i], callData, mle_event.MLE_EVENT_DELAYED, _states[i])
+	}
+
+    t.Logf("TestImmediateMode: dispatching events.")
+    _machine.DispatchEvents()
+}
+
+func TestDisableEventCB(t *testing.T) {
+	// Create the state machine callback handlers.
+	var stateCB = _NewState(t)
+	
+	initStateMachine(stateCB)
+	
+	// Disable some handlers.
+	_machine.DisableEventCB(_states[0],_ids[0])
+	_machine.DisableEventCB(_states[2],_ids[2])
+	_machine.DisableEventCB(_states[4],_ids[4])
+
+	// Process the state machine.
+	t.Logf("TestDisableEventCB: processing events.")
+	mainloop()
+}
+
+func TestDisableEvent(t *testing.T) {
+	// Create the state machine callback handlers.
+	var stateCB = _NewState(t)
+	
+	initStateMachine(stateCB)
+	
+	// Disable some events.
+	_machine.DisableEvent(_states[0])
+	_machine.DisableEvent(_states[1])
+	_machine.DisableEvent(_states[2])
+	_machine.DisableEvent(_states[4])
+
+	// Process the state machine.
+	t.Logf("TestDisableEvent: processing events.")
+	mainloop();
+}
+
+func TestFlush(t *testing.T) {
+    // Create the state machine callback handlers.
+    var stateCB = _NewState(t)
+            
+    initStateMachine(stateCB)
+            
+    // Process the state machine.
+    for i := 0; i < len(_states); i++ {
+        var buf bytes.Buffer
+		buf.WriteString("Processing State = " + strconv.Itoa(_states[i]))
+		callData := newCallData(buf.String())
+        _machine.ProcessEventWithPriority(_states[i], callData, mle_event.MLE_EVENT_DELAYED, _states[i])
+	}
+            
+    _machine.Flush()
+
+    t.Logf("TestFlush: dispatching events.")
+    _machine.DispatchEvents()
+}
+
+func TestPrioritizedCB(t *testing.T) {
+	setup()
+
+    // Create the state machine callback handlers.
+    var cb1 = _NewStateWithName("One", t)
+    var cb2 = _NewStateWithName("Two", t)
+    var cb3 = _NewStateWithName("Three", t)
+    var cb4 = _NewStateWithName("Four", t)
+    var cb5 = _NewStateWithName("Five", t)
+            
+	// Add the handlers to the event dispatcher.
+	clientData := newClientData("Next State = " + strconv.Itoa(1))
+	_ids[0], _ = _machine.InstallEventCB(_states[0], cb1, clientData)
+	clientData = newClientData("Next State = " + strconv.Itoa(2))
+	_ids[1], _ = _machine.InstallEventCB(_states[0], cb2, clientData)
+	clientData = newClientData("Next State = " + strconv.Itoa(3))
+	_ids[2], _ = _machine.InstallEventCB(_states[0], cb3, clientData)
+	clientData = newClientData("Next State = " + strconv.Itoa(4))
+	_ids[3], _ = _machine.InstallEventCB(_states[0], cb4, clientData)
+	clientData = newClientData("Next State = " + strconv.Itoa(0))
+    _ids[4], _ = _machine.InstallEventCB(_states[0], cb5, clientData)
+
+    // Enable the handlers.
+    _machine.ChangeCBPriority(_states[0], _ids[0], 5)
+    _machine.ChangeCBPriority(_states[0], _ids[1], 4)
+    _machine.ChangeCBPriority(_states[0], _ids[2], 3)
+    _machine.ChangeCBPriority(_states[0], _ids[3], 2)
+    _machine.ChangeCBPriority(_states[0], _ids[4], 1)
+
+    // Process the state machine.
+	var buf bytes.Buffer
+	buf.WriteString("Processing Event 0")
+	callData := newCallData(buf.String())
+    _machine.ProcessEvent(_states[0], callData , mle_event.MLE_EVENT_DELAYED)
+
+	t.Logf("TestPrioritizedCB: dispatching prioritzed events.")
+    _machine.DispatchEvents()
+}
