@@ -92,8 +92,8 @@ func NewMleSet() *MleSet {
 	return p
 }
 
-// ToString implements IObject interface.
-func (stage *MleSet) ToString() string {
+// String implements IObject interface.
+func (stage *MleSet) String() string {
 	return ""
 }
 

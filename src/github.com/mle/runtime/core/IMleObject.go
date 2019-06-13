@@ -46,16 +46,11 @@ import (
 	mle_util "github.com/mle/runtime/util"
 )
 
-/**
- * This interface is used to define functionality that is shared across
- * Magic Lantern Runtime classes.
- * <p>
- * The IMleObject interface specifies a common way of setting and
- * retrieving properties.
- * </p>
- *
- * @author Mark S. Millard
- */
+// IMleObject is an interface used to define functionality that is shared across
+// Magic Lantern Runtime classes.
+//
+// The IMleObject interface specifies a common way of setting and
+// retrieving properties.
 type IMleObject interface {
 	// Inherit root Object interface.
 	mle_util.IObject

@@ -47,4 +47,6 @@ package core
  *
  * @author Mark S. Millard
  */
-type IMleSet interface{}
+type IMleSet interface{
+	IMleObject
+}

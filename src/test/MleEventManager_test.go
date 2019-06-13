@@ -45,6 +45,15 @@ import (
 	mle_event "github.com/mle/runtime/event"
 )
 
+func testMleEventManager_setUp() {
+	manager := mle_event.NewMleEventManager()
+	manager.Clear()
+}
+
+func testMleEventManager_tearDown() {
+	// Do nothing for now.
+}
+
 func TestNewMleEventManager(t *testing.T) {
 	// Construct an empty queue.
 	manager := mle_event.NewMleEventManager()
@@ -57,6 +66,8 @@ func TestNewMleEventManager(t *testing.T) {
  * Test adding events to the event manager.
  */
 func TestAddEvent(t *testing.T) {
+	testMleEventManager_setUp()
+
 	manager := mle_event.NewMleEventManager()
 	if manager == nil {
 		t.Errorf("TestAddEvent: NewMleEventManager() returned nil")
@@ -68,13 +79,17 @@ func TestAddEvent(t *testing.T) {
 
 	// Try to add it again, should not be able to.
 	manager.AddEvent(event, "");
-	if manager.Size() != 5 {
+	if manager.Size() != 1 {
 		// There should be four default events plus the one we just added.
 		t.Errorf("TestAddEvent: EventManager size should be 5, got %d", manager.Size())
 	}
+
+	testMleEventManager_tearDown()
 }
 
 func TestRemoveEvent(t *testing.T) {
+	testMleEventManager_setUp()
+
 	manager := mle_event.NewMleEventManager()
 	if manager == nil {
 		t.Errorf("TestAddEvent: NewMleEventManager() returned nil")
@@ -88,23 +103,27 @@ func TestRemoveEvent(t *testing.T) {
 	event = mle_event.CreateEvent(0)
 	manager.AddEvent(event, "")
 
-	if manager.Size() != 6 {
-		// There should be four default events plus the two we just added.
-		t.Errorf("TestAddEvent: EventManager size should be 6, got %d", manager.Size())
+	if manager.Size() != 2 {
+		// There should be two events.
+		t.Errorf("TestAddEvent: EventManager size should be 2, got %d", manager.Size())
 	}
 
 	// Remove the last event.
 	manager.RemoveEvent(event)
-	if manager.Size() != 5 {
+	if manager.Size() != 1 {
 		// There should be one event less.
-		t.Errorf("TestAddEvent: EventManager size should be 5, got %d", manager.Size())
+		t.Errorf("TestAddEvent: EventManager size should be 1, got %d", manager.Size())
 	}
+
+	testMleEventManager_tearDown()
 }
 
 /**
  * Test creating new events.
  */
 func TestCreateEvent(t *testing.T) {
+	testMleEventManager_setUp()
+
 	manager := mle_event.NewMleEventManager()
 	if manager == nil {
 		t.Errorf("TestCreateEvent: NewMleEventManager() returned nil")
@@ -112,32 +131,32 @@ func TestCreateEvent(t *testing.T) {
 
 	var event = mle_event.CreateEvent(0)
 	//assertEquals(event, 0);
-	if event != 4 {
-		t.Errorf("TestCreateEvent: expecting event 4, got %d", event)
+	if event != 0 {
+		t.Errorf("TestCreateEvent: expecting event 0, got %d", event)
 	}
 	manager.AddEvent(event, "")
 	event = mle_event.CreateEvent(0)
 	//assertEquals(event, 1);
-	if event != 5 {
-		t.Errorf("TestCreateEvent: expecting event 5, got %d", event)
+	if event != 1 {
+		t.Errorf("TestCreateEvent: expecting event 1, got %d", event)
 	}
 	manager.AddEvent(event, "")
 	event = mle_event.CreateEvent(0)
 	//assertEquals(event, 2);
-	if event != 6 {
-		t.Errorf("TestCreateEvent: expecting event 6, got %d", event)
+	if event != 2 {
+		t.Errorf("TestCreateEvent: expecting event 2, got %d", event)
 	}
 	manager.AddEvent(event, "")
 	event = mle_event.CreateEvent(0)
 	//assertEquals(event, 3);
-	if event != 7 {
-		t.Errorf("TestCreateEvent: expecting event 7, got %d", event)
+	if event != 3 {
+		t.Errorf("TestCreateEvent: expecting event 3, got %d", event)
 	}
 	manager.AddEvent(event, "")
 	event = mle_event.CreateEvent(0)
 	//assertEquals(event, 4);
-	if event != 8 {
-		t.Errorf("TestCreateEvent: expecting event 8, got %d", event)
+	if event != 4 {
+		t.Errorf("TestCreateEvent: expecting event 4, got %d", event)
 	}
 	manager.AddEvent(event, "")
 	event = mle_event.CreateEvent(1)
@@ -177,37 +196,41 @@ func TestCreateEvent(t *testing.T) {
 	}
 	event = mle_event.CreateEvent(0)
 	//assertEquals(event, 5);
-	if event != 9 {
-		t.Errorf("TestCreateEvent: expecting event 9, got %d", event)
+	if event != 5 {
+		t.Errorf("TestCreateEvent: expecting event 5, got %d", event)
 	}
 	
 	//assertEquals(MleEventManager.getInstance().size(), 10);
-	if manager.Size() != 14 {
-		// There should be four default events plus the 10 we just added.
-		t.Errorf("TestCreateEvent: EventManager size should be 14, got %d", manager.Size())
+	if manager.Size() != 10 {
+		// There should be ten events.
+		t.Errorf("TestCreateEvent: EventManager size should be 19, got %d", manager.Size())
 	}
+
+	testMleEventManager_tearDown()
 }
 
 func TestHasEvent(t *testing.T) {
+	testMleEventManager_setUp()
+
     manager := mle_event.NewMleEventManager()
 	if manager == nil {
 		t.Errorf("TestHasEvent: NewMleEventManager() returned nil")
 	}
 
 	var event = mle_event.CreateEvent(0)
-	if event != 4 {
-		t.Errorf("TestHasEvent: expecting event 4, got %d", event)
+	if event != 0 {
+		t.Errorf("TestHasEvent: expecting event 0, got %d", event)
 	}
     manager.AddEvent(event, "")
 	event = mle_event.CreateEvent(0)
-	if event != 5 {
-		t.Errorf("TestHasEvent: expecting event 5, got %d", event)
+	if event != 1 {
+		t.Errorf("TestHasEvent: expecting event 1, got %d", event)
 	}
 	manager.AddEvent(event, "")
-	if !manager.HasEvent(4) {
+	if !manager.HasEvent(0) {
 		t.Errorf("TestHasEvent: expecting event true, got false")
 	}
-	if !manager.HasEvent(5) {
+	if !manager.HasEvent(1) {
 		t.Errorf("TestHasEvent: expecting event true, got false")
 	}
 	event = mle_event.CreateEvent(1)
@@ -223,9 +246,13 @@ func TestHasEvent(t *testing.T) {
 	if manager.HasEvent(131072) {
 		t.Errorf("TestHasEvent: expecting event false, got true")
 	}
+
+	testMleEventManager_tearDown()
 }
 
 func TestHasEventWithName(t *testing.T) {
+	testMleEventManager_setUp()
+
 	manager := mle_event.NewMleEventManager()
 	if manager == nil {
 		t.Errorf("TestHasEventWithName: NewMleEventManager() returned nil")
@@ -235,10 +262,10 @@ func TestHasEventWithName(t *testing.T) {
 	manager.AddEvent(event, "")
 	event = mle_event.CreateEvent(0)
 	manager.AddEvent(event, "One")
-	if !manager.HasEvent(4) {
+	if !manager.HasEvent(0) {
 		t.Errorf("TestHasEvent: expecting event true, got false")
 	}
-	if !manager.HasEvent(5) {
+	if !manager.HasEvent(1) {
 		t.Errorf("TestHasEvent: expecting event true, got false")
 	}
 	if !manager.HasEventByName("One") {
@@ -256,4 +283,6 @@ func TestHasEventWithName(t *testing.T) {
 	if manager.HasEventByName("Two") {
 		t.Errorf("TestHasEvent: expecting event false, got true")
 	}
+
+	testMleEventManager_tearDown()
 }

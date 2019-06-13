@@ -174,8 +174,8 @@ func (actor *MleActor) Init() {}
  */
 func (actor *MleActor) Dispose() {}
 
-// ToString implements IObject interface.
-func (actor *MleActor) ToString() string {
+// String implements IObject interface.
+func (actor *MleActor) String() string {
 	return ""
 }
 

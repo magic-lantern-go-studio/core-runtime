@@ -45,4 +45,6 @@ package core
  *
  * @author Mark S. Millard
  */
-type IMleActor interface{}
+type IMleActor interface{
+	IMleObject
+}
