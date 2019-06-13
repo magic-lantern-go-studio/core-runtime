@@ -68,40 +68,40 @@ func TestInsertionRemoval(t *testing.T) {
 		   
 	pq.Insert(mle_util.NewMlePQElementWithKey(3,nil))
 	var n3 mle_util.IMleElement = pq.Remove()
-	t.Logf("TestInsertionRemoval: element n3 %s\n", n3.ToString())
+	t.Logf("TestInsertionRemoval: element n3 %s\n", n3.String())
 	//TestCase.assertEquals(new Integer(3).toString(),n3.toString())
-	if n3.ToString() != "3" {
-		t.Errorf("TestInsertionRemoval: want element = 3, got %s", n3.ToString())
+	if n3.String() != "3" {
+		t.Errorf("TestInsertionRemoval: want element = 3, got %s", n3.String())
 	}
 		   
 	pq.Insert(mle_util.NewMlePQElementWithKey(5,nil))
 	pq.Insert(mle_util.NewMlePQElementWithKey(2,nil))
 	var n5 *mle_util.MlePQElement = pq.Remove()
-	t.Logf("TestInsertionRemoval: element n5 %s\n", n5.ToString())
+	t.Logf("TestInsertionRemoval: element n5 %s\n", n5.String())
 	//TestCase.assertEquals(new Integer(5).toString(),n5.toString())
-	if n5.ToString() != "5" {
-		t.Errorf("TestInsertionRemoval: want element = 5, got %s", n5.ToString())
+	if n5.String() != "5" {
+		t.Errorf("TestInsertionRemoval: want element = 5, got %s", n5.String())
 	}
 	var n2 *mle_util.MlePQElement = pq.Remove()
-	t.Logf("TestInsertionRemoval: element n2 %s\n", n2.ToString())
+	t.Logf("TestInsertionRemoval: element n2 %s\n", n2.String())
 	//TestCase.assertEquals(new Integer(2).toString(),n2.toString())
-	if n2.ToString() != "2" {
-		t.Errorf("TestInsertionRemoval: want element = 2, got %s", n2.ToString())
+	if n2.String() != "2" {
+		t.Errorf("TestInsertionRemoval: want element = 2, got %s", n2.String())
 	}
 		   
 	pq.Insert(mle_util.NewMlePQElementWithKey(4,nil))
 	pq.Insert(mle_util.NewMlePQElementWithKey(7,nil))
 	var n7 *mle_util.MlePQElement = pq.Remove()
-	t.Logf("TestInsertionRemoval: element n7 %s\n", n7.ToString())
+	t.Logf("TestInsertionRemoval: element n7 %s\n", n7.String())
 	var n4 *mle_util.MlePQElement = pq.Remove()
-	t.Logf("TestInsertionRemoval: element n7 %s\n", n4.ToString())
+	t.Logf("TestInsertionRemoval: element n7 %s\n", n4.String())
 	//TestCase.assertEquals(new Integer(7).toString(),n7.toString())
-	if n7.ToString() != "7" {
-		t.Errorf("TestInsertionRemoval: want element = 7, got %s", n7.ToString())
+	if n7.String() != "7" {
+		t.Errorf("TestInsertionRemoval: want element = 7, got %s", n7.String())
 	}
 	//TestCase.assertEquals(new Integer(4).toString(),n4.toString())
-	if n4.ToString() != "4" {
-		t.Errorf("TestInsertionRemoval: want element = 4, got %s", n4.ToString())
+	if n4.String() != "4" {
+		t.Errorf("TestInsertionRemoval: want element = 4, got %s", n4.String())
 	}
 }
 
@@ -124,10 +124,10 @@ func TestQueueGrowth(t *testing.T) {
 			 
 	for i :=  mle_util.MLE_INC_QSIZE; i >= 0;  i-- {
 		element := pq.Remove()
-		t.Logf("TestQueueGrowth: element %d %s\n", i, element.ToString())
+		t.Logf("TestQueueGrowth: element %d %s\n", i, element.String())
 		//TestCase.assertEquals(new Integer(i).toString(),element.toString())
-		if element.ToString() != strconv.Itoa(i) {
-			t.Errorf("TestQueueGrowth: want element = %s, got %s", strconv.Itoa(i), element.ToString())
+		if element.String() != strconv.Itoa(i) {
+			t.Errorf("TestQueueGrowth: want element = %s, got %s", strconv.Itoa(i), element.String())
 		}
 	}
 }
@@ -170,16 +170,16 @@ func TestRemove(t *testing.T) {
 			 
 	element := pq.Remove()
 	//TestCase.assertEquals(new Integer(9).toString(),element.toString())
-	if element.ToString() != "9" {
-		t.Errorf("TestRemove: want element = 9, got %s", element.ToString())
+	if element.String() != "9" {
+		t.Errorf("TestRemove: want element = 9, got %s", element.String())
 	}
 	
 	// Removing all elements with priority 5.
 	elements := pq.RemoveWithPriority(5)
 	for i := 0; i < 5; i++ {
 		//TestCase.assertEquals(new Integer(5).toString(),elements[i].toString())
-		if elements[i].ToString() != "5" {
-			t.Errorf("TestRemove: want element = 5, got %s", elements[i].ToString())
+		if elements[i].String() != "5" {
+			t.Errorf("TestRemove: want element = 5, got %s", elements[i].String())
 		}
 	}
 }
@@ -203,8 +203,8 @@ func TestJoin(t *testing.T) {
 			 
 	element := result.Remove()
 	//TestCase.assertEquals(new Integer(34).toString(),element.toString());
-	if element.ToString() != "34" {
-		t.Errorf("TestJoin: want element = 34, got %s", element.ToString())
+	if element.String() != "34" {
+		t.Errorf("TestJoin: want element = 34, got %s", element.String())
 	}
 }
 
@@ -225,8 +225,8 @@ func TestChangeItem(t *testing.T) {
 			 
 	element := pq.Remove()
 	//TestCase.assertEquals(new Integer(56).toString(),element.toString());
-	if element.ToString() != "56" {
-		t.Errorf("TestJoin: want element = 56, got %s", element.ToString())
+	if element.String() != "56" {
+		t.Errorf("TestJoin: want element = 56, got %s", element.String())
 	}
 }
 
@@ -257,8 +257,8 @@ func TestDestroy(t *testing.T) {
 		 
 	element := pq.Remove()
 	//TestCase.assertEquals(new Integer(6).toString(),element.toString());
-	if element.ToString() != "6" {
-		t.Errorf("TestDestroy: want element = 6, got %s", element.ToString())
+	if element.String() != "6" {
+		t.Errorf("TestDestroy: want element = 6, got %s", element.String())
 	}
 }
 

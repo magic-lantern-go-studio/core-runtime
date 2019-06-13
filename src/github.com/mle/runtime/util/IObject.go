@@ -41,21 +41,14 @@ package util
 
 // Import go packages.
 
-/**
- * This interface is used to define functionality that is shared across
- * Magic Lantern Runtime classes.
- * <p>
- * The IObject interface specifies a common way to return the string
- * of a Magic Lantern class.
- * </p>
- *
- * @author Mark S. Millard
- */
+// IObject is an interface used to define functionality that is shared across
+// Magic Lantern Runtime classes.
+//
+// The IObject interface specifies a common way to return the string
+// of a Magic Lantern class.
 type IObject interface {
-	/**
-	 * Convert the object to a string.
-	 */
-	ToString() string
+	// Convert the object to a string.
+	String() string
 }
 
 type Object interface{}
@@ -63,7 +56,7 @@ type Object interface{}
 /*
 type Object struct {}
 
-func (obj *Object) ToString() string {
+func (obj *Object) String() string {
     return ""
 }
 */

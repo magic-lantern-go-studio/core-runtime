@@ -58,7 +58,7 @@ func newHeapMyElement(name string, id int) *ha_MyElement {
 	return p
 }
 
-func (e *ha_MyElement) ToString() string {
+func (e *ha_MyElement) String() string {
 	return e.name
 }
 
@@ -90,11 +90,11 @@ func TestHeapSort(t *testing.T) {
 		aha.AddElement(mle_util.NewMlePQElementWithKey(tk[k], nil))
     }
 
-	t.Logf("TestHeapSort: Unsorted list %s\n", aha.ToString())
+	t.Logf("TestHeapSort: Unsorted list %s\n", aha.String())
     aha.Heapsort()
 
-	t.Logf("TestHeapSort: Sorted list %s\n", aha.ToString())
-	var str = aha.ToString()
+	t.Logf("TestHeapSort: Sorted list %s\n", aha.String())
+	var str = aha.String()
 	if str != "( 1 2 3 4 5 6 7 8 8 )" {
 		t.Errorf("TestHeapSort: want elements = ( 1 2 3 4 5 6 7 8 8 ), got %s", str)
 	}

@@ -117,7 +117,7 @@ func (converter *MleMediaRefConverter) GetFilename() (string, *MleError) {
 			return filename, nil
 		} else {
 			// Expecting a generic IObject if not a byte array.
-			filename := converter.m_reference.(mle_util.IObject).ToString()
+			filename := converter.m_reference.(mle_util.IObject).String()
 			return filename, nil
 		}
 	}

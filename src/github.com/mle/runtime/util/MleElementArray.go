@@ -95,13 +95,13 @@ func NewMleElementArrayWithSize(size int) *MleElementArray {
  * 
  * @return A <code>String</code> is returned.
  */
-func (ea *MleElementArray) ToString() string {
+func (ea *MleElementArray) String() string {
 	var buf bytes.Buffer
 
 	buf.WriteString("( ")
 	var size = ea.m_lastElement + 1
 	for i := 0; i < size; i++ {
-		buf.WriteString(ea.m_array[i].ToString())
+		buf.WriteString(ea.m_array[i].String())
 		buf.WriteString(" ")
 	}
 	buf.WriteString(")")

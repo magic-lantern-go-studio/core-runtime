@@ -59,7 +59,7 @@ func ea_NewMyElement(name string, id int) *ea_MyElement {
 	return p
 }
 
-func (e *ea_MyElement) ToString() string {
+func (e *ea_MyElement) String() string {
 	return e.name
 }
 
@@ -190,10 +190,10 @@ func TestDecrementNumElements(t *testing.T) {
 	}
 }
 
-func TestToString(t *testing.T) {
+func TestString(t *testing.T) {
 	a := mle_util.NewMleElementArray()
 	if a == nil {
-		t.Errorf("TestToString: NewMleElementArray() returned nil")
+		t.Errorf("TestString: NewMleElementArray() returned nil")
 	}
 
 	var e mle_util.IMleElement
@@ -204,12 +204,12 @@ func TestToString(t *testing.T) {
 	}
 	n := a.GetNumElements()
 	if n != 10 {
-		t.Errorf("TestToString: want number of elements = 10, got %d", n)
+		t.Errorf("TestString: want number of elements = 10, got %d", n)
 	}
 
-	var str = a.ToString()
+	var str = a.String()
 	if str != "( 0 1 2 3 4 5 6 7 8 9 )" {
-		t.Errorf("TestToString: want elements = ( 0 1 2 3 4 5 6 7 8 9 ), got %s", str)
+		t.Errorf("TestString: want elements = ( 0 1 2 3 4 5 6 7 8 9 ), got %s", str)
 	}
 }
 

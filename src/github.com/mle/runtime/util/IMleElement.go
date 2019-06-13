@@ -60,6 +60,6 @@ type IMleElement interface {
 	 * 
 	 * @return A <code>String</code> is returned.
 	 */
-	ToString() string
+	String() string
  }
  

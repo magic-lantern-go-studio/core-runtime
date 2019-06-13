@@ -118,7 +118,7 @@ func (ha *MleHeapArray) heapTreeString() string {
 			//String node = at(ni) != m_nullIndex ? getElementAt(ni).toString() : " ";
 			var node string
 			if ha.at(ni) != ha.m_nullIndex {
-                node = ha.GetElementAt(ni).ToString()
+                node = ha.GetElementAt(ni).String()
 			} else {
 			    node = " "
 			}
@@ -444,7 +444,7 @@ func (ha *MleHeapArray) Capacity() int {
 	return ha.m_array.Capacity()
 }
 
-// ToString implements the IObject interface.
-func (ha *MleHeapArray) ToString() string {
-	return ha.m_array.ToString()
+// String implements the IObject interface.
+func (ha *MleHeapArray) String() string {
+	return ha.m_array.String()
 }

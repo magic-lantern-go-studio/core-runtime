@@ -166,8 +166,8 @@ func NewMleRTPropertyEntryWithClassAndField(classname string, fieldname string) 
 	return p
 }
 
-// ToString implements IObject interface.
-func (entry *MleRTPropertyEntry) ToString() string {
+// String implements IObject interface.
+func (entry *MleRTPropertyEntry) String() string {
 	// ToDo: return a usable string value.
 	return ""
 }
@@ -205,8 +205,8 @@ func NewMleRTActorClassEntryWithClassAndOffset(classname string, offset int) *Ml
 	return p
 }
 
-// ToString implements IObject interface.
-func (acentry *MleRTActorClassEntry) ToString() string {
+// String implements IObject interface.
+func (acentry *MleRTActorClassEntry) String() string {
 	// ToDo: return a usable string value.
 	return ""
 }
@@ -269,8 +269,8 @@ func NewMleRTActorRoleEntryWithClass(classname string) *MleRTRoleClassEntry {
 	return p
 }
 
-// ToString implements IObject interface.
-func (rcentry *MleRTRoleClassEntry) ToString() string {
+// String implements IObject interface.
+func (rcentry *MleRTRoleClassEntry) String() string {
 	// ToDo: return a usable string value.
 	return ""
 }
@@ -342,8 +342,8 @@ func NewMleRTSetClassEntryWithClassAndOffset(classname string, offset int) *MleR
 	return p
 }
 
-// ToString implements IObject interface.
-func (scentry *MleRTSetClassEntry) ToString() string {
+// String implements IObject interface.
+func (scentry *MleRTSetClassEntry) String() string {
 	// ToDo: return a usable string value.
 	return ""
 }
@@ -406,8 +406,8 @@ func NewMleRTGroupEntryWithClass(classname string) *MleRTGroupClassEntry {
 	return p
 }
 
-// ToString implements IObject interface.
-func (gcentry *MleRTGroupClassEntry) ToString() string {
+// String implements IObject interface.
+func (gcentry *MleRTGroupClassEntry) String() string {
 	// ToDo: return a usable string value.
 	return ""
 }
@@ -470,8 +470,8 @@ func NewMleRTMediaRefClassEntryWithClass(classname string) *MleRTMediaRefClassEn
 	return p
 }
 
-// ToString implements IObject interface.
-func (mcentry *MleRTMediaRefClassEntry) ToString() string {
+// String implements IObject interface.
+func (mcentry *MleRTMediaRefClassEntry) String() string {
 	// ToDo: return a usable string value.
 	return ""
 }
@@ -534,8 +534,8 @@ func NewMleRTSceneEntryWithClass(classname string) *MleRTSceneClassEntry {
 	return p
 }
 
-// ToString implements IObject interface.
-func (scentry *MleRTSceneClassEntry) ToString() string {
+// String implements IObject interface.
+func (scentry *MleRTSceneClassEntry) String() string {
 	// ToDo: return a usable string value.
 	return ""
 }
@@ -592,8 +592,8 @@ func NewMleRTSetEntryWithClassAndSet(classname string, set *MleSet) *MleRTSetEnt
 	return p
 }
 
-// ToString implements IObject interface.
-func (sentry *MleRTSetEntry) ToString() string {
+// String implements IObject interface.
+func (sentry *MleRTSetEntry) String() string {
 	// ToDo: return a usable string value.
 	return ""
 }
@@ -609,8 +609,8 @@ func NewMleRTMediaRefEntryWithClass(classname string) *MleRTMediaRefEntry {
 	return p
 }
 
-// ToString implements IObject interface.
-func (sentry *MleRTMediaRefEntry) ToString() string {
+// String implements IObject interface.
+func (sentry *MleRTMediaRefEntry) String() string {
 	// ToDo: return a usable string value.
 	return ""
 }

@@ -97,7 +97,7 @@ func (pe *MlePQElement) IsGreaterThan(e IMleElement) bool {
  * 
  * @return A <code>String</code> is returned.
  */
-func (pe *MlePQElement) ToString() string {
+func (pe *MlePQElement) String() string {
 	v := int64(pe.Key)
 	return strconv.FormatInt(v, 10)
 }

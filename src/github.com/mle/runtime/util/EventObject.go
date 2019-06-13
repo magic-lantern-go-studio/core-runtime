@@ -76,19 +76,20 @@ func (event *EventObject) GetSource() Object {
 	return event.m_source
 }
 
-// ToString implements the IObject interface.
+// String implements the IObject interface.
 //
-// The ToString method on the Event source will be invoked, if it exists.
+// The String method on the Event source will be invoked, if it exists.
 // If the method doesn't exist, then "" will be returned.
 //
 // Return
-//   The value of the Event source ToString method will be returned.
-//   If the Event source does not have a ToString method, then ""
+//
+//   The value of the Event source String method will be returned.
+//   If the Event source does not have a String method, then ""
 //   will be returned.
-func (event *EventObject) ToString() string {
+func (event *EventObject) String() string {
     if event.m_source != nil {
-	    if MethodExists(event.m_source, "ToString") {
-		    value, _ := Invoke(event.m_source, "ToString")
+	    if MethodExists(event.m_source, "String") {
+		    value, _ := Invoke(event.m_source, "String")
 			var str = value.Interface().(string)
 		    return str
 	    }

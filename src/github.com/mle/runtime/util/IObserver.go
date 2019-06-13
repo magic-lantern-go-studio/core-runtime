@@ -41,14 +41,15 @@ package util
 
 // Import go packages.
 
-// IObserver defined an Observer interface to be used with an Observable pattern.
+// IObserver defines an Observer interface to be used with an Observable pattern.
 type IObserver interface {
-	// This method is called whenever the observed object is changed.
+	// Update is called whenever the observed object is changed.
 	// An application calls an Observable object's NotifyObservers method to have
 	// all the object's observers notified of the change.
 	//
-	// Parameters:
-	//   observer - the observable object.
-	//   arg - an argument passed to the NotifyObservers method.
+	// Parameters
+	//
+	//   observer - The observable object.
+	//   arg - An argument passed to the NotifyObservers method.
 	Update(observer IObservable, arg IObject)
 }

@@ -39,14 +39,20 @@
 // Declare package.
 package util
 
+// Comparable is an interface that composes a total ordering on the objects
+// of each class that implements it.
 type Comparable interface {
-	/*
-	 * CompareTo is used to compare the current object with the specified object.
-	 * It returns
-	 *
-	 *   positive integer, if the current object is greater than the specified object.
-     *   negative integer, if the current object is less than the specified object.
-     *   zero, if the current object is equal to the specified object.
-	 */
+	// CompareTo is used to compare the current object with the specified object.
+	//
+	// Parameters
+	//
+	//   obj - The object to compare against.
+	//
+	// Return
+	//
+	//   positive integer, if the current object is greater than the specified object.
+    //   negative integer, if the current object is less than the specified object.
+    //   zero, if the current object is equal to the specified object.
+	//
 	CompareTo(obj Object) int
 }

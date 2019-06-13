@@ -122,9 +122,9 @@ func (s *_State) Dispatch(event mle_event.MleEvent, clientData mle_util.IObject)
 	buf.WriteString("Executing Callback: ")
 	buf.WriteString(s.mName + "\n")
 	buf.WriteString("\tCaller Data: ")
-	//buf.WriteString(event.GetCallData().ToString() + "\n")
+	//buf.WriteString(event.GetCallData().String() + "\n")
 	buf.WriteString("\tClient Data: ")
-	buf.WriteString(clientData.ToString())
+	buf.WriteString(clientData.String())
 	s.t.Logf(buf.String())
 	s.mState = event.GetId()
 				 
@@ -183,7 +183,7 @@ func newClientData(str string) *clientData {
 	return p
 }
 
-func (cd *clientData) ToString() string {
+func (cd *clientData) String() string {
 	return cd.mData
 }
 

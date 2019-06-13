@@ -160,7 +160,7 @@ func (ha *MleHeapSortArray) Grow(size int) bool {
 	return ha.m_array.Grow(size)
 }
 
-// ToString implements the IObject interface.
-func (ha *MleHeapSortArray) ToString() string {
-	return ha.m_array.ToString()
+// String implements the IObject interface.
+func (ha *MleHeapSortArray) String() string {
+	return ha.m_array.String()
 }
