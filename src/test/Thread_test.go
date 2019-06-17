@@ -40,6 +40,8 @@
 package mle_test
 
 import (
+	"strconv"
+	"sync"
 	"time"
 	"testing"
 
@@ -60,7 +62,7 @@ func testThread_newMyRunnable(t *testing.T) *testThread_myRunnable {
 
 func (r *testThread_myRunnable) Run(done chan bool) {
 	r.t.Logf("Running Thread " + r.mName)
-	time.Sleep(10000 * time.Millisecond)
+	time.Sleep(100 * time.Millisecond)
 	if done != nil {
 	    done <- true
 	}
@@ -85,9 +87,11 @@ func TestNewThreadWithRunnable(t *testing.T) {
 	// Execute thread but don't wait for completion.
 	thread.Run(nil)
 
-	// Execute thread and waith for completion based on done channel.
+	// Execute thread and wait for completion based on done channel.
 	var done = make(chan bool)
 	thread.Run(done)
+
+	time.Sleep(1000 * time.Millisecond)
 }
 
 func TestStart(t *testing.T) {
@@ -95,7 +99,32 @@ func TestStart(t *testing.T) {
 
 	thread := mle_util.NewThreadWithRunnableAndName(r, "MyThread")
 	if thread == nil {
-		t.Errorf("TestNewThreadWithRunnable: NewThreadWithRunnable() returned nil")
+		t.Errorf("TestStart: NewThreadWithRunnable() returned nil")
 	}
-	thread.Start()
+
+	// Start the thread execution.
+	var wg sync.WaitGroup
+	thread.Start(&wg)
+	// And wait for it to complete.
+	wg.Wait()
+
+	time.Sleep(1000 * time.Millisecond)
+}
+
+func TestMutlipleThreads(t *testing.T) {
+	r := testThread_newMyRunnable(t)
+
+	var threads [10](*mle_util.Thread)
+	for i := 0; i < 10; i++ {
+		tname := "Thread-" + strconv.Itoa(i)
+		threads[i] = mle_util.NewThreadWithRunnableAndName(r, tname)
+	}
+
+	// Start the threads' execution.
+	var wg sync.WaitGroup
+	for i := 0; i < len(threads); i++ {
+		threads[i].Start(&wg)
+	}
+	// And wait for the threads to complete.
+	wg.Wait()
 }

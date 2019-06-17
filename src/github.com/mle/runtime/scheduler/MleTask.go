@@ -41,6 +41,8 @@ package scheduler
 
 // Import go packages.
 import (
+	"sync"
+
 	mle_util "github.com/mle/runtime/util"
 )
 
@@ -63,7 +65,9 @@ type MleTask struct {
     // The name of the task.
     m_name string
     // A flag indicating whether the task is running.
-    m_running bool
+	m_running bool
+	// The task work group.
+	m_wg sync.WaitGroup
 }
 
 /**
@@ -114,7 +118,7 @@ func (t *MleTask) Invoke() {
 	} else {
 		t.m_thread = mle_util.NewThreadWithRunnable(t.m_task)
 	}
-	t.m_thread.Start()
+	t.m_thread.Start(&t.m_wg)
 }
 
 /**

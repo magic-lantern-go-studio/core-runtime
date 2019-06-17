@@ -40,6 +40,9 @@
 package util
 
 // Import go packages.
+import (
+	"sync"
+)
 
 type Thread struct {
 	// The name of the thread.
@@ -97,10 +100,23 @@ func (t *Thread) Run(done chan bool) {
 }
 
 // Start will begin the thread execution.
-func (t *Thread) Start() {
+//
+// Parameters
+//   wg - A reference to a synchronization WaitGroup.
+func (t *Thread) Start(wg *sync.WaitGroup) {
 	if t.m_runnable != nil {
+		// Start the runnable.
 		t.m_alive = true
+		wg.Add(1)
 		go t.m_runnable.Run(t.m_done)
+
+		// Establish a goroutine to indicate when the thread has
+		// completed running.
+		go func(waitgroup *sync.WaitGroup) {
+			<-t.m_done
+			defer waitgroup.Done()
+			t.m_alive = false
+		}(wg)
 	}
 }
 
