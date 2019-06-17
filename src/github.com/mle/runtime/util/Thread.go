@@ -125,7 +125,7 @@ func (t *Thread) IsAlive() bool {
 	return t.m_alive
 }
 
-// Returns a string representation of this thread, including the thread's name,
+// String returns a string representation of this thread, including the thread's name,
 // priority, and thread group.
 func (t *Thread) String() string {
 	return t.m_name

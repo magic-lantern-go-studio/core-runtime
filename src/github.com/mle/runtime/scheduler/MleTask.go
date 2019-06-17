@@ -1,6 +1,6 @@
 /*
- * @file IObject.go
- * Created on May 23, 2019. (msm@wizzerworks.com)
+ * @file MleTask.go
+ * Created on June 14, 2019. (msm@wizzerworks.com)
  */
 
 // COPYRIGHT_BEGIN
@@ -142,4 +142,9 @@ func (t *MleTask) IsRunning() bool {
 	    }
 	}
 	return status
+}
+
+// String implements the IObject interface.
+func (t *MleTask) String() string {
+    return t.m_name
 }

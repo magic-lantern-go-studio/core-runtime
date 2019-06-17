@@ -44,12 +44,19 @@ package util
 
 // Runnable is an interface used to create Magic Lantern Threads.
 type Runnable interface {
-	// When an object implementing interface Runnable is used to create a thread,
-	// starting the thread causes the object's run method to be called in that separately
-	// executing thread.
+	// Extend IObject interface.
+	IObject
+
+	// When an object implementing interface Runnable is used to create a Thread,
+	// starting the Thread causes the object's Run method to be called in a separately
+	// executing goroutine.
 	//
-	// The general contract of the method run is that it may take any action whatsoever.
+	// The general contract of the method Run is that it may take any action whatsoever.
 	// The method may ignore signaling on the done channel for Threads that don't
 	// require notification.
+	//
+	// Parameters
+	//   done - The channel that should be used to notify that the Run method
+	//          has completed execution.
 	Run(done chan bool)
 }
