@@ -51,9 +51,9 @@ var GMleLogger *MleLog
 
 // MleLog is a convenience class for Magic Lantern logging.
 type MleLog struct {
-	// The logger buffer.
+	// The logger's buffer.
 	mBuf bytes.Buffer
-	// A logger
+	// The logger.
 	mLogger *log.Logger
 }
 
@@ -65,7 +65,7 @@ type MleLog struct {
 func NewMleLog() *MleLog {
 	if GMleLogger == nil {
 	    p := new(MleLog)
-		p.mLogger = log.New(&p.mBuf, "MLE: ", log.Lshortfile)
+		p.mLogger = log.New(&p.mBuf, "MLE: ", log.Ldate | log.Ltime | log.Lshortfile)
 		GMleLogger = p
 	}
 
