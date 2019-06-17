@@ -40,7 +40,11 @@
 package util
 
 // Import go packages.
-import "fmt"
+import (
+	"strconv"
+	"bytes"
+	"fmt"
+)
 
 // Import Magic Lantern packages.
 
@@ -167,6 +171,13 @@ func (vector *Vector) Pop() {
 }
 
 // Peek will determine if the specified element is contained in the Vector.
+//
+// Parameters
+//   element - The element to test for containership.
+//
+// Return
+//   The index into the Vector where the contained element resides will
+//   be returned. Otherwise a value of -1 will be returned.
 func (vector *Vector) Peek(element interface{}) int {
 	for i := 0; i <= len(*vector); i++ {
 		next := (*vector)[i]
@@ -176,6 +187,23 @@ func (vector *Vector) Peek(element interface{}) int {
 	}
 
 	return -1
+}
+
+// Contains will determine if the specified element is contained in the
+// Vector.
+//
+// Parameters
+//   element - The element to test for containership.
+//
+// Return
+//   true will be returned if the specified element is contained in the
+//   Vector. Otherwise false will be returned.
+func (vector *Vector) Contains(element interface{}) bool {
+	var index int = vector.Peek(element)
+	if index == -1 {
+		return false
+	}
+	return true
 }
 
 // PushFront pushes the specified element onto the Vector into the first
@@ -200,4 +228,17 @@ func (vector *Vector) PrintVector() {
 	for i := 0; i < len(*vector); i++ {
 		fmt.Println("vector[", i, "] = ", (*vector)[i])
 	}
+}
+
+// String implements the IObject interface.
+func (vector *Vector) String() string {
+	var buf bytes.Buffer
+
+	for i := 0; i < len(*vector); i++ {
+		//var str string = "vector[" + strconv.Itoa(i) + "] = " + strconv.Itoa((*vector)[i].String())
+		var str string = "vector[" + strconv.Itoa(i) + "]"
+		buf.WriteString(str)
+	}
+
+	return buf.String()
 }
