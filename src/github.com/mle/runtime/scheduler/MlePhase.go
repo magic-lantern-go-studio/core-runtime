@@ -41,8 +41,6 @@ package scheduler
 
 // Import go packages.
 import (
-	//"sync"
-
 	mle_util "github.com/mle/runtime/util"
 )
 
@@ -96,7 +94,7 @@ func NewMlePhaseWithName(name string) *MlePhase {
 }
 
 /**
- * Sets the name of this phase.
+ * Set the name of this phase.
  *
  * @param name A <code>java.lang.String</code> identifying the name
  * of this phase.
@@ -106,7 +104,7 @@ func (p *MlePhase) SetName(name string) {
 }
 
 /**
- * Gets the name of this phase.
+ * Get the name of this phase.
  *
  * @return A <code>java.lang.String</code> identifying the name
  * of this phase.
@@ -116,7 +114,7 @@ func (p *MlePhase) GetName() string {
 }
 	 
 /**
- * Gets the number of registered tasks for this phase.
+ * Get the number of registered tasks for this phase.
  *
  * @return An integer representing the number of tasks belonging
  * to this phase.
@@ -127,7 +125,7 @@ func (p *MlePhase) GetNumberOfTasks() int	 {
 
 
 /**
- * Adds a task to this phase.
+ * Add a task to this phase.
  *
  * @param task An instance of the MleTask class.
  *
@@ -143,7 +141,7 @@ func (p *MlePhase) AddTask(task *MleTask) bool {
 }
 	 
 /**
- * Removes a task from this phase.
+ * Remove a task from this phase.
  *
  * @param task An instance of the MleTask class.
  *
@@ -154,10 +152,134 @@ func (p *MlePhase) AddTask(task *MleTask) bool {
  * @see MleTask 
  */
 func (p *MlePhase) DeleteTask(task *MleTask) bool {
-	//f := &foo{}
 	p.m_tasks.RemoveElement(task)
 	return true
 }
+
+/**
+ * Remove the nth task from this phase.
+ *
+ * @param n An integer identifying the nth task in this phase.
+ *
+ * @return A boolean indicating whether the task was successfully deleted.
+ * If the task was successfully removed,
+ * <b>true</b> is returned; otherwise, <b>false</b> will be returned.
+ *
+ * @see MleTask
+ */
+func (p *MlePhase) DeleteTaskAt(n int) bool {
+	task := p.GetTask(n)
+		 
+	if (task != nil){
+		return p.DeleteTask(task)
+	}
+
+	return false
+}
+
+/**
+ * Remove the task with the specified name from this phase.
+ *
+ * @param name A <code>java.lang.String</code> identifying the name
+ * of the task to be removed.
+ *
+ * @return A boolean indicating whether the task was successfully deleted.
+ * If the task was successfully removed,
+ * <b>true</b> is returned; otherwise, <b>false</b> will be returned.
+ */
+func (p *MlePhase) DeleteTaskWithNAme(name string) bool {
+	task := p.GetTaskWithName(name)
+		 
+	if task != nil {
+		return p.DeleteTask(task)
+	}
+	
+	return false
+}
+ 
+
+/**
+ * Retrieves the task at index n. The task is not removed from this phase.
+ *
+ * @param n An integer identifying the nth task in this phase.
+ *
+ * @return If a task is found at the specifed location, <code>n</code>,
+ * then an object of type <code>MleTask</code> will be returned.
+ * Otherwise, <b>null</b> will be returned.
+ *
+ * @see MleTask
+ */
+func (p *MlePhase) GetTask(n int) *MleTask {
+	var task *MleTask
+	
+	e := p.m_tasks.ElementAt(n)
+	if e == nil {
+		// Task not found at index n.
+		return nil
+	} else {
+	    task = e.(*MleTask)
+	}
+	return task
+}
+
+/**
+ * Retrieves the task with the specified <code>name</code.
+ *
+ * @param name A <code>java.lang.String</code> identifying the name
+ * of the task to be retrieved.
+ *
+ * @return If a task is found matching the specifed <code>name</code>
+ * then an object of type <code>MleTask</code> will be returned.
+ * Otherwise, <b>null</b> will be returned.
+ *
+ * @see MleTask
+*/
+func (p *MlePhase) GetTaskWithName(name string) *MleTask {
+	var task *MleTask
+
+	for i := 0; i < len(*p.m_tasks); i++ {
+		curTask := p.m_tasks.ElementAt(i).(*MleTask)
+		curName := curTask.GetName()
+		if (name == curName) {
+			/* Names are equal */
+			task = curTask
+			break
+		}
+	}
+	return task
+}
+
+/**
+ * Executes the tasks registered with this phase. <code>Run</code>
+ * will not return until all tasks have been completed.
+ */
+func (p *MlePhase) Run(done chan bool) {
+	/*
+	System.out.print("*** EXECTUING PHASE ");
+	System.out.print(m_name);
+	System.out.println(" ***");
+	System.out.flush();
+	*/
+		 
+	/* Invoke tasks which have been registered. */
+	for i := 0; i < len(*p.m_tasks); i++	{
+		task := p.m_tasks.ElementAt(i).(*MleTask)
+		task.Invoke()
+	}
+		 
+	/* Wait for all tasks to complete before returning */
+	tasksCompleted := false
+	waitForTaskCompletion:
+	for ! tasksCompleted {
+		for i := 0; i < len(*p.m_tasks); i++	{
+			task := p.m_tasks.ElementAt(i).(*MleTask)
+			if (task.IsRunning()) {
+				continue waitForTaskCompletion
+			}
+		}
+	    tasksCompleted = true;
+	}
+} 
  
 // String implements the IObject interface.
 func (p *MlePhase) String() string {

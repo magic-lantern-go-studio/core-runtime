@@ -68,6 +68,10 @@ func (r *testThread_myRunnable) Run(done chan bool) {
 	}
 }
 
+func (r *testThread_myRunnable) String() string {
+	return r.mName
+}
+
 func TestNewThread(t *testing.T) {
 	thread := mle_util.NewThread()
 	if thread == nil {
