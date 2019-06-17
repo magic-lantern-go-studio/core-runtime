@@ -41,7 +41,10 @@ package scheduler
 
 // Import go packages.
 import (
+	"bytes"
+
 	mle_util "github.com/mle/runtime/util"
+	mle_core "github.com/mle/runtime/core"
 )
 
 /**
@@ -254,12 +257,11 @@ func (p *MlePhase) GetTaskWithName(name string) *MleTask {
  * will not return until all tasks have been completed.
  */
 func (p *MlePhase) Run(done chan bool) {
-	/*
-	System.out.print("*** EXECTUING PHASE ");
-	System.out.print(m_name);
-	System.out.println(" ***");
-	System.out.flush();
-	*/
+	var buf bytes.Buffer
+	buf.WriteString("*** EXECTUING PHASE ")
+	buf.WriteString(p.m_name)
+	buf.WriteString(" ***")
+	mle_core.MleLogInfo(buf.String(), false)
 		 
 	/* Invoke tasks which have been registered. */
 	for i := 0; i < len(*p.m_tasks); i++	{
