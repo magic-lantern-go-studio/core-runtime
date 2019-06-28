@@ -42,6 +42,7 @@ package scheduler
 // Import go packages.
 import (
 	"bytes"
+	"sync"
 
 	mle_util "github.com/mle/runtime/util"
 	mle_core "github.com/mle/runtime/core"
@@ -71,6 +72,8 @@ type MlePhase struct {
 	m_tasks *mle_util.Vector
 	// The name of the phase.
 	m_name string
+	// Internal lock used for protecting sensitve code.
+	lock sync.Mutex
 }
 
 /**
@@ -103,7 +106,9 @@ func NewMlePhaseWithName(name string) *MlePhase {
  * of this phase.
  */
 func (p *MlePhase) SetName(name string) {
+	p.lock.Lock()
 	p.m_name = name
+	p.lock.Unlock()
 }
 
 /**
@@ -139,7 +144,9 @@ func (p *MlePhase) GetNumberOfTasks() int	 {
  * @see MleTask
  */
 func (p *MlePhase) AddTask(task *MleTask) bool {
+	p.lock.Lock()
 	p.m_tasks.AddElement(task)
+	p.lock.Unlock()
 	return true
 }
 	 
@@ -155,7 +162,9 @@ func (p *MlePhase) AddTask(task *MleTask) bool {
  * @see MleTask 
  */
 func (p *MlePhase) DeleteTask(task *MleTask) bool {
+	p.lock.Lock()
 	p.m_tasks.RemoveElement(task)
+	p.lock.Unlock()
 	return true
 }
 
@@ -171,13 +180,18 @@ func (p *MlePhase) DeleteTask(task *MleTask) bool {
  * @see MleTask
  */
 func (p *MlePhase) DeleteTaskAt(n int) bool {
+	status := false
+
+	p.lock.Lock()
+
 	task := p.GetTask(n)
-		 
 	if (task != nil){
-		return p.DeleteTask(task)
+		status = p.DeleteTask(task)
 	}
 
-	return false
+	p.lock.Unlock()
+
+	return status
 }
 
 /**
@@ -191,13 +205,18 @@ func (p *MlePhase) DeleteTaskAt(n int) bool {
  * <b>true</b> is returned; otherwise, <b>false</b> will be returned.
  */
 func (p *MlePhase) DeleteTaskWithNAme(name string) bool {
+	status := false
+
+	p.lock.Lock()
+
 	task := p.GetTaskWithName(name)
-		 
 	if task != nil {
-		return p.DeleteTask(task)
+		status = p.DeleteTask(task)
 	}
+
+	p.lock.Unlock()
 	
-	return false
+	return status
 }
  
 
@@ -214,14 +233,19 @@ func (p *MlePhase) DeleteTaskWithNAme(name string) bool {
  */
 func (p *MlePhase) GetTask(n int) *MleTask {
 	var task *MleTask
+
+	p.lock.Lock()
 	
 	e := p.m_tasks.ElementAt(n)
 	if e == nil {
 		// Task not found at index n.
-		return nil
+		task = nil
 	} else {
 	    task = e.(*MleTask)
 	}
+
+	p.lock.Unlock()
+
 	return task
 }
 
@@ -240,6 +264,8 @@ func (p *MlePhase) GetTask(n int) *MleTask {
 func (p *MlePhase) GetTaskWithName(name string) *MleTask {
 	var task *MleTask
 
+	p.lock.Lock()
+
 	for i := 0; i < len(*p.m_tasks); i++ {
 		curTask := p.m_tasks.ElementAt(i).(*MleTask)
 		curName := curTask.GetName()
@@ -249,6 +275,9 @@ func (p *MlePhase) GetTaskWithName(name string) *MleTask {
 			break
 		}
 	}
+
+	p.lock.Unlock()
+
 	return task
 }
 
