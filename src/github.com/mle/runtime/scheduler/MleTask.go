@@ -68,6 +68,8 @@ type MleTask struct {
 	m_running bool
 	// The task work group.
 	m_wg sync.WaitGroup
+	// Internal lock used for protecting sensitve code.
+	lock sync.Mutex
 }
 
 /**
@@ -112,6 +114,8 @@ func (t *MleTask) GetName() string {
  * specified during construction.
  */
 func (t *MleTask) Invoke() {
+	t.lock.Lock()
+
 	t.m_running = true
 	if t.m_name != "" {
 		t.m_thread = mle_util.NewThreadWithRunnableAndName(t.m_task, t.m_name)
@@ -119,6 +123,8 @@ func (t *MleTask) Invoke() {
 		t.m_thread = mle_util.NewThreadWithRunnable(t.m_task)
 	}
 	t.m_thread.Start(&t.m_wg)
+
+	t.lock.Unlock()
 }
 
 /**
@@ -130,6 +136,8 @@ func (t *MleTask) Invoke() {
  */
 func (t *MleTask) IsRunning() bool {
 	var status bool
+
+	t.lock.Lock()
 	 
 	if t.m_running == false {
 		status = false
@@ -141,6 +149,9 @@ func (t *MleTask) IsRunning() bool {
 			status = false
 	    }
 	}
+
+	t.lock.Unlock()
+
 	return status
 }
 

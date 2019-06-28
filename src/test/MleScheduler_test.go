@@ -214,10 +214,9 @@ func TestSchdulerTest1(t *testing.T) {
 
 	/* Print number of registered phases. */
 	msg := "Number of scheduled phases: " + strconv.Itoa(scheduler.GetNumberOfPhases())
-	//mle_core.MleLogInfo(msg, false)
 	t.Logf(msg)
-	
-	mle_core.MleLogInfo("*** Test 1 ***", false)
+
+	msg = "*** Test 1 ***"
 	t.Logf(msg)
 
 	if scheduler.GetNumberOfPhases() != 3 {
@@ -242,7 +241,7 @@ func TestSchdulerTest1(t *testing.T) {
 	}
 	
 	/* Print tasks. */
-	scheduler.Dump()
+	//scheduler.Dump()
         
 	/* Invoke tasks, that is, execute them. */
     go func() {
@@ -252,5 +251,4 @@ func TestSchdulerTest1(t *testing.T) {
 		scheduler.SetExitOk()
 	}()
 	scheduler.Run(nil)
-
 }

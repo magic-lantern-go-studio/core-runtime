@@ -45,6 +45,8 @@ import (
 	"fmt"
 	"strconv"
 	"bytes"
+	"sync"
+
 	mle_util "github.com/mle/runtime/util"
 )
 
@@ -71,10 +73,12 @@ import (
  * @see MleTask
  */
 type MleScheduler struct {
-    // The number of phases.
+    // The scheduled phases.
     m_phases *mle_util.Vector
     // Flag indicating that it is ok to exit.
-    m_exitOK bool
+	m_exitOK bool
+	// Internal lock used for protecting sensitve code.
+	lock sync.Mutex
 }
 
 // NewMleScheduler is the default constructor.
@@ -89,7 +93,9 @@ func NewMleScheduler() *MleScheduler {
  * Flags scheduler that it is Ok to exit.
  */
 func (s *MleScheduler) SetExitOk() {
+	s.lock.Lock()
 	s.m_exitOK = true
+	s.lock.Unlock()
 }
 
 /**
@@ -114,7 +120,9 @@ func (s *MleScheduler) GetNumberOfPhases() int {
  * @see MlePhase
  */
 func (s *MleScheduler) AddPhase(phase *MlePhase) bool {
+	s.lock.Lock()
 	s.m_phases.AddElement(phase)
+	s.lock.Unlock()
 	return true
 }
 
@@ -130,7 +138,9 @@ func (s *MleScheduler) AddPhase(phase *MlePhase) bool {
  * @see MlePhase
  */
 func (s *MleScheduler) DeletePhase(phase *MlePhase) bool {
+	s.lock.Lock()
 	s.m_phases.RemoveElement(phase)
+	s.lock.Unlock()
 	return true
 }
 
@@ -148,12 +158,17 @@ func (s *MleScheduler) DeletePhase(phase *MlePhase) bool {
 func (s *MleScheduler) GetPhase(n int) *MlePhase {
 	var phase *MlePhase
 
+	s.lock.Lock()
+
 	e := s.m_phases.ElementAt(n)
 	if e != nil {
 		phase = e.(*MlePhase)
 	} else {
 		phase = nil
 	}
+
+	s.lock.Unlock()
+
 	return phase
 }
 
@@ -172,6 +187,8 @@ func (s *MleScheduler) GetPhase(n int) *MlePhase {
 func (s *MleScheduler) GetPhaseWithName(name string) *MlePhase {
 	var phase *MlePhase
 
+	s.lock.Lock()
+
 	for i := 0; i < len(*s.m_phases); i++ {
 		curPhase := s.m_phases.ElementAt(i).(*MlePhase)
 		curName := curPhase.GetName()
@@ -181,6 +198,9 @@ func (s *MleScheduler) GetPhaseWithName(name string) *MlePhase {
 			break
 		}
 	}
+
+	s.lock.Unlock()
+
 	return phase
 }
 
@@ -201,10 +221,17 @@ func (s *MleScheduler) GetPhaseWithName(name string) *MlePhase {
  * @see MleTask
  */
 func (s *MleScheduler) AddTask(phase *MlePhase, task *MleTask) bool {
+	status := false
+
+	s.lock.Lock()
+
 	if s.m_phases.Contains(phase) {
-		return phase.AddTask(task)
+		status = phase.AddTask(task)
 	}
-	return false
+
+	s.lock.Unlock()
+
+	return status
 }
 
 /**
@@ -224,10 +251,17 @@ func (s *MleScheduler) AddTask(phase *MlePhase, task *MleTask) bool {
  * @see MleTask
  */
 func (s *MleScheduler) DeleteTask(phase *MlePhase, task *MleTask) bool {
+	status := false
+
+	s.lock.Lock()
+
 	if s.m_phases.Contains(phase) {
-		return phase.DeleteTask(task)
+		status = phase.DeleteTask(task)
 	}
-	return false
+
+	s.lock.Unlock()
+
+	return status
 }
 
 /**
@@ -253,7 +287,7 @@ func (s *MleScheduler) DeleteTask(phase *MlePhase, task *MleTask) bool {
  * and start at the first scheduled phase.
  */
 func (s *MleScheduler) Run(done chan bool) {
-	s. m_exitOK = false
+	s.m_exitOK = false
 	for i := 0; i < len(*s.m_phases); i++ {
 		/* Fork off tasks in task list scheduled for this phase. */ 
 		phase := s.m_phases.ElementAt(i).(* MlePhase)
