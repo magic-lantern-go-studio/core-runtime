@@ -61,6 +61,7 @@ func testMleTask_NewTaskTest1(t *testing.T) *testMleTask_TaskTest1 {
 }
 
 func (task *testMleTask_TaskTest1) Run(done chan bool) {
+	task.t.Logf("Running testMleTask_TaskTest1")
     for i := 0; i < 10; i++ {
 		mle_core.MleLogInfo("Task Test 1: " + strconv.Itoa(i), false)
 	}
@@ -72,6 +73,32 @@ func (task *testMleTask_TaskTest1) Run(done chan bool) {
 }
 
 func (task *testMleTask_TaskTest1) String() string {
+	return task.mName
+}
+
+type testMleTask_TaskTest2 struct {
+	mName string
+	t *testing.T
+}
+
+func testMleTask_NewTaskTest2(t *testing.T) *testMleTask_TaskTest2 {
+	p := new(testMleTask_TaskTest2)
+	p.mName = "Task Test 2"
+	p.t = t
+	return p
+}
+
+func (task *testMleTask_TaskTest2) Run(done chan bool) {
+	task.t.Logf("Running testMleTask_TaskTest2")
+    time.Sleep(10000 * time.Millisecond)
+	// Signal completion.
+	if done != nil {
+		task.t.Logf("testMleTask_TaskTest2 signaling completion.")
+	    done <- true
+	}
+}
+
+func (task *testMleTask_TaskTest2) String() string {
 	return task.mName
 }
 
@@ -100,4 +127,22 @@ func TestMleTaskInvoke(t *testing.T) {
 	// Wait for task completion.
 	t.Logf("waiting for simple runnable to complete.")
 	time.Sleep(5000 * time.Millisecond)
+}
+
+func TestMleTaskIsRunning(t *testing.T) {
+	task := mle_sched.NewMleTask(nil)
+	if task == nil {
+		t.Errorf("TestMleTaskIsRunning: NewMleTask() returned nil.")
+	}
+
+	// Create and run task with runnable.
+	runnable := testMleTask_NewTaskTest2(t)
+	task = mle_sched.NewMleTask(runnable)
+	t.Logf("testing simple runnable.")
+	task.Invoke()
+
+	for task.IsRunning() {
+		t.Logf("waiting for simple runnable to complete.")
+		time.Sleep(1000 * time.Millisecond)
+	}
 }
