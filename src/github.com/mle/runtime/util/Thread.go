@@ -57,7 +57,7 @@ type Thread struct {
 
 func NewThread() *Thread {
 	p := new(Thread)
-	p.m_name = "Thread "
+	p.m_name = "Unknown Thread"
 	p.m_runnable = nil
 	p.m_alive = false
 	p.m_done = make(chan bool)
@@ -66,7 +66,7 @@ func NewThread() *Thread {
 
 func NewThreadWithRunnable(runnable Runnable) *Thread {
 	p := new(Thread)
-	p.m_name = "Thread "
+	p.m_name = "Unknown Thread"
 	p.m_runnable = runnable
 	p.m_alive = false
 	p.m_done = make(chan bool)
@@ -113,6 +113,7 @@ func (t *Thread) Start(wg *sync.WaitGroup) {
 		// Establish a goroutine to indicate when the thread has
 		// completed running.
 		go func(waitgroup *sync.WaitGroup) {
+			// Wait for runnable to complete.
 			<-t.m_done
 			defer waitgroup.Done()
 			t.m_alive = false

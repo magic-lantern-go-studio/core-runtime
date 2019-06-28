@@ -69,7 +69,7 @@ func TestNewMleEventDispatcherWithCapacity(t *testing.T) {
 /*
  * Extends MleEventCallback.
  */
-type _State struct {
+type testMleEventDispatcher_State struct {
 	t *testing.T
 	mCb *mle_event.MleEventCallback
 	mName string
@@ -79,8 +79,8 @@ type _State struct {
 /*
  * The default constructor.
  */
-func _NewState(t *testing.T) *_State {
-	p := new(_State)
+func testMleEventDispatcher_NewState(t *testing.T) *testMleEventDispatcher_State {
+	p := new(testMleEventDispatcher_State)
 	p.t = t
 	p.mCb = mle_event.NewMleEventCallback()
 	p.mName = "UNKNOWN"
@@ -93,8 +93,8 @@ func _NewState(t *testing.T) *_State {
  * 
  * @param name The state name.
  */
-func _NewStateWithName(name string, t *testing.T) *_State {
-	p := new(_State)
+func testMleEventDispatcher_NewStateWithName(name string, t *testing.T) *testMleEventDispatcher_State {
+	p := new(testMleEventDispatcher_State)
 	p.t = t
 	p.mCb = mle_event.NewMleEventCallback()
 	p.mName = name
@@ -111,7 +111,7 @@ func _NewStateWithName(name string, t *testing.T) *_State {
  * @return If the event is successfully dispatched, then <b>true</b> will be
  * returned. Otherwise, <b>false</b> will be returned.
  */
-func (s *_State) Dispatch(event mle_event.MleEvent, clientData mle_util.IObject) bool {
+func (s *testMleEventDispatcher_State) Dispatch(event mle_event.MleEvent, clientData mle_util.IObject) bool {
 	var retValue = true
 			 
 	// Do some work.
@@ -135,11 +135,11 @@ func (s *_State) Dispatch(event mle_event.MleEvent, clientData mle_util.IObject)
 	return retValue
 }
 
-func (s *_State) Enable(enable bool) {
+func (s *testMleEventDispatcher_State) Enable(enable bool) {
 	s.mCb.Enable(enable)
 }
 
-func (s *_State) IsEnabled() bool {
+func (s *testMleEventDispatcher_State) IsEnabled() bool {
 	return s.mCb.IsEnabled();
 }
 
@@ -207,7 +207,7 @@ func (cd *clientData) String() string {
 }
 
 // Initialize the state machine.
-func initStateMachine(cb *_State) {
+func initStateMachine(cb *testMleEventDispatcher_State) {
     if ! setupComplete {
 		setup()
 	}
@@ -238,7 +238,7 @@ func initStateMachine(cb *_State) {
  */
 func TestImmediateMode(t *testing.T) {
 	// Create the state machine callback handlers.
-	var stateCB = _NewState(t)
+	var stateCB = testMleEventDispatcher_NewState(t)
 			 
 	initStateMachine(stateCB)
 			 
@@ -253,7 +253,7 @@ func TestImmediateMode(t *testing.T) {
  */
 func TestDelayedMode(t *testing.T) {
 	// Create the state machine callback handlers.
-	var stateCB = _NewState(t)
+	var stateCB = testMleEventDispatcher_NewState(t)
 
 	initStateMachine(stateCB);
             
@@ -271,7 +271,7 @@ func TestDelayedMode(t *testing.T) {
 
 func TestDisableEventCB(t *testing.T) {
 	// Create the state machine callback handlers.
-	var stateCB = _NewState(t)
+	var stateCB = testMleEventDispatcher_NewState(t)
 	
 	initStateMachine(stateCB)
 	
@@ -287,7 +287,7 @@ func TestDisableEventCB(t *testing.T) {
 
 func TestDisableEvent(t *testing.T) {
 	// Create the state machine callback handlers.
-	var stateCB = _NewState(t)
+	var stateCB = testMleEventDispatcher_NewState(t)
 	
 	initStateMachine(stateCB)
 	
@@ -304,7 +304,7 @@ func TestDisableEvent(t *testing.T) {
 
 func TestFlush(t *testing.T) {
     // Create the state machine callback handlers.
-    var stateCB = _NewState(t)
+    var stateCB = testMleEventDispatcher_NewState(t)
             
     initStateMachine(stateCB)
             
@@ -326,11 +326,11 @@ func TestPrioritizedCB(t *testing.T) {
 	setup()
 
     // Create the state machine callback handlers.
-    var cb1 = _NewStateWithName("One", t)
-    var cb2 = _NewStateWithName("Two", t)
-    var cb3 = _NewStateWithName("Three", t)
-    var cb4 = _NewStateWithName("Four", t)
-    var cb5 = _NewStateWithName("Five", t)
+    var cb1 = testMleEventDispatcher_NewStateWithName("One", t)
+    var cb2 = testMleEventDispatcher_NewStateWithName("Two", t)
+    var cb3 = testMleEventDispatcher_NewStateWithName("Three", t)
+    var cb4 = testMleEventDispatcher_NewStateWithName("Four", t)
+    var cb5 = testMleEventDispatcher_NewStateWithName("Five", t)
             
 	// Add the handlers to the event dispatcher.
 	clientData := newClientData("Next State = " + strconv.Itoa(1))

@@ -41,6 +41,7 @@ package scheduler
 
 // Import go packages.
 import (
+	"runtime"
 	"fmt"
 	"strconv"
 	"bytes"
@@ -262,6 +263,9 @@ func (s *MleScheduler) Run(done chan bool) {
 		if s.m_exitOK {
 			break
 		}
+
+		/* Encourage other goroutines to run. */
+		runtime.Gosched()
 	}
 }
 
@@ -288,6 +292,7 @@ func (s *MleScheduler) Dump() {
 		buf.WriteString(strconv.Itoa(i+1))
 		buf.WriteString(": ")
 		buf.WriteString(phase.GetName())
+		buf.WriteString("\n")
 			 
 		for j := 0; j < phase.GetNumberOfTasks(); j++ {
 			task := phase.GetTask(j)
@@ -301,6 +306,7 @@ func (s *MleScheduler) Dump() {
 			} else {
 				buf.WriteString("empty")
 			}
+			buf.WriteString("\n")
 		}
 	}
 

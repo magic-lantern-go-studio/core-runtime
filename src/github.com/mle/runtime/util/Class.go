@@ -88,6 +88,14 @@ func FieldExists(any interface{}, name string) bool {
 
 // Invoke is used to call a method on a specified interface.
 //
+// Parameters
+//   any - The interface to invoke the method on.
+//   name - The name of the method to invoke.
+//   args - The list of parameters to the method being invoked.
+//
+// Return
+//   The return values of the invoked method will be returned.
+//
 // Example
 //   firstResult, err := Invoke(AnyStructInterface, MethodName, Params...)
 func Invoke(any interface{}, name string, args ...interface{}) (reflect.Value, error) {
@@ -123,6 +131,14 @@ func Invoke(any interface{}, name string, args ...interface{}) (reflect.Value, e
 }
 
 // InstanceOf determines if an interface is an instance of, or type of, a specified class.
+//
+// Parameters
+//   objectPtr - A reference to the object being tested.
+//   typePtr   - A reference to the type to compare against.
+//
+// Return
+//   true will be returned if the objectPtr is an instance of the typePtr.
+//   Otherwise false will be returned.
 func InstanceOf(objectPtr interface{}, typePtr interface{}) bool {
 	aType := reflect.TypeOf(objectPtr)
 	bType := reflect.TypeOf(typePtr)

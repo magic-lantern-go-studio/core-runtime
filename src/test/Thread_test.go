@@ -61,8 +61,9 @@ func testThread_newMyRunnable(t *testing.T) *testThread_myRunnable {
 }
 
 func (r *testThread_myRunnable) Run(done chan bool) {
-	r.t.Logf("Running Thread " + r.mName)
+	r.t.Logf("Running thread " + r.mName)
 	time.Sleep(100 * time.Millisecond)
+	// Signal completion.
 	if done != nil {
 	    done <- true
 	}
@@ -98,7 +99,7 @@ func TestNewThreadWithRunnable(t *testing.T) {
 	time.Sleep(1000 * time.Millisecond)
 }
 
-func TestStart(t *testing.T) {
+func TestThreadStart(t *testing.T) {
 	r := testThread_newMyRunnable(t)
 
 	thread := mle_util.NewThreadWithRunnableAndName(r, "MyThread")
@@ -115,7 +116,7 @@ func TestStart(t *testing.T) {
 	time.Sleep(1000 * time.Millisecond)
 }
 
-func TestMutlipleThreads(t *testing.T) {
+func TestThreadMutlipleThreads(t *testing.T) {
 	r := testThread_newMyRunnable(t)
 
 	var threads [10](*mle_util.Thread)
